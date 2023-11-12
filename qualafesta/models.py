@@ -10,4 +10,5 @@ class TicketsOrder(models.Model):
 
     def __str__(self):
         return f"{self.customer_id} {self.order_date} {self.payment_situation} {self.total_price}"
-  
+
+class Event
