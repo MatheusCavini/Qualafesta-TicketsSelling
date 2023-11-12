@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'staticpages.apps.StaticpagesConfig'
+    'qualafesta.apps.QualafestaConfig', # adicione esta linha
 ]
 
 MIDDLEWARE = [
