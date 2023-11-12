@@ -1,6 +1,40 @@
 from django.db import models
 from django.conf import settings
 
+class Event(models.Model):
+    organizer_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    date_time = models.DateTimeField()
+    description = models.CharField(max_length=255)
+    capacity = models.IntegerField()
+    splash_image = models.URLField(max_length=200, null=True)
+    thumb_image = models.URLField(max_length=200, null=True)
+    gender = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"event: {self.name} - {self.date_time} - {self.location} - {self.description}"
+    
+class ArtistParticipation(models.Model):
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    artist_name = models.CharField(max_length=255)
+    begin_time = models.DateField()
+    end_time = models.DateField()
+    artist_image = models.URLField(max_length=200, null=True)
+
+    def __str__(self):
+        return f"artist participatio: {self.artist_name} - {self.begin_time} - {self.end_time}"
+
+class TicketCattegory(models.Model):
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    capacity = models.IntegerField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    sold_amount = models.IntegerField()
+
+    def __str__(self):
+        return f"ticket category: {self.name} - {self.description} - {self.capacity} - {self.price} - {self.sold_amount}"
 
 class TicketsOrder(models.Model):
     customer_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -9,6 +43,16 @@ class TicketsOrder(models.Model):
     total_price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.customer_id} {self.order_date} {self.payment_situation} {self.total_price}"
+        return f"ticket order: {self.customer_id} - {self.order_date} - {self.payment_situation} - {self.total_price}"
 
-class Event
+
+class PurchasedTicket(models.Model):
+    acess_controller_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    ticket_order_id = models.ForeignKey(TicketsOrder, on_delete=models.CASCADE)
+    ticket_category_id = models.ForeignKey(TicketCattegory, on_delete=models.CASCADE)
+    hash_code = models.CharField(max_length=255)
+    entrance = models.DateField()
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"purchased_ticker: {self.acess_controller_id} - {self.ticket_order_id} - {self.ticket_category_id} - {self.entrance} - {self.status}"
