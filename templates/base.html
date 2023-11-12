@@ -12,6 +12,16 @@
 
 <body>
     <header id="cabecalho-principal">
+        <nav id="navegacao-principal">
+            <ul>
+                {% if user.is_authenticated %}
+                    <li> Logado com {{ user.username }} </li>
+                    <li><a href="{% url 'logout' %}">Log out</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Log in</a></li>
+                {% endif %}
+            </ul>
+        </nav>
 
     </header>
     <main id="conteiner-principal">
