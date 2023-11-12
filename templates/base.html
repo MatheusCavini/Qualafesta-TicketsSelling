@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}{% endblock %} | Watch that film!
+    </title>
+</head>
+
+<body>
+    <header id="cabecalho-principal">
+        <a href="{% url 'index' %}">
+            <p>WTF</p>
+        </a>
+        <nav id="navegacao-principal">
+            <ul>
+                <li><a href="{% url 'about' %}">Sobre</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <main id="conteiner-principal">
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <footer id="rodape-principal">
+        <p>
+            <small>Copyright 2021</small>
+        </p>
+    </footer>
+</body>
+
+</html>
