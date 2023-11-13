@@ -1,5 +1,31 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
+
+
+class Customer(models.Model):
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
+    phone = models.CharField(max_length=255)
+    profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
+
+    def __str__(self):
+        return f"customer: {self.user_id} - {self.phone} "
+    
+class Organizer(models.Model):
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=255)
+    profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
+    cnpj = models.URLField(max_length=200, null=True)
+
+    def __str__(self):
+        return f"organizer: {self.user_id}  - {self.phone} - {self.cnpj} "
+    
+class AcessController(models.Model):
+    profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
+
+    def __str__(self):
+        return f"acess controller"
+
 
 class Event(models.Model):
     organizer_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -8,8 +34,8 @@ class Event(models.Model):
     date_time = models.DateTimeField()
     description = models.CharField(max_length=255)
     capacity = models.IntegerField()
-    splash_image = models.URLField(max_length=200, null=True)
-    thumb_image = models.URLField(max_length=200, null=True)
+    splash_images = models.ImageField(upload_to='images/event_images/', blank=True, null=True)
+    thumb_image = models.ImageField(upload_to='images/event_images/', blank=True, null=True)
     gender = models.CharField(max_length=255)
 
     def __str__(self):
@@ -20,7 +46,7 @@ class ArtistParticipation(models.Model):
     artist_name = models.CharField(max_length=255)
     begin_time = models.DateField()
     end_time = models.DateField()
-    artist_image = models.URLField(max_length=200, null=True)
+    artist_image = models.ImageField(upload_to='images/artist_images/', blank=True, null=True)
 
     def __str__(self):
         return f"artist participatio: {self.artist_name} - {self.begin_time} - {self.end_time}"

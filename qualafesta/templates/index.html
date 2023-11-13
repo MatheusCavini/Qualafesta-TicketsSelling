@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% if user.is_authenticated %}
+    <p>Bem-vindo, {{ user.username }}!</p>
+    <a href="{% url 'qualafesta:logout' %}">Logout</a>
+{% else %}
+    <p>Você não está autenticado.</p>
+{% endif %}
+{% endblock %}

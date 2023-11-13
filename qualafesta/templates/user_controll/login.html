@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+login
+{% endblock title %}
+
+{% block content %}
+<h2>login</h2>
+<a href="{% url 'qualafesta:register' %}">registrar</a>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">entrar</button>
+
+</form>
+
+{% endblock content %} 
