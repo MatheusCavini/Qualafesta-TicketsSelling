@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Customer(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
     phone = models.CharField(max_length=255)
-    profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
+    profile_image = models.ImageField(upload_to="images/profile_images/", blank=True, null=True)
 
     def __str__(self):
         return f"customer: {self.user_id} - {self.phone} "
@@ -15,7 +15,7 @@ class Organizer(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = models.CharField(max_length=255)
     profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
-    cnpj = models.URLField(max_length=200, null=True)
+    cnpj = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return f"organizer: {self.user_id}  - {self.phone} - {self.cnpj} "

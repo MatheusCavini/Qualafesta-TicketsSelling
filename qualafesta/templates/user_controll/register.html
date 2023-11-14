@@ -6,7 +6,15 @@ registrar
 
 {% block content %}
 
-<h2>registrar</h2>
+<h2>registrar {{type_user}}</h2>
 <a href="{% url 'qualafesta:register_customer' %}">customer</a>
+<a href="{% url 'qualafesta:register_organizer' %}">organizer</a>
+
+<h2>registrar {{type_user}}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enviar</button>
+</form>
 
 {% endblock content %} 
