@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from qualafesta.decorators import group_required
 
 
+######################################################################## Login Views
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qualafesta:login"))
@@ -40,9 +41,6 @@ def login(request):
     form = AuthenticationForm()
     context = {'form': form}
     return render(request, 'user_controll/login.html', context)
-
-#def logout(request):
-#    return render(request, 'user_controll/login.html', {})
 
 def register(request):
     return render(request, 'user_controll/register.html', {})
@@ -130,12 +128,56 @@ def register_organizer(request):
     context = {'form': form, 'type_user':'organizer'}
     return render(request, 'user_controll/register.html', context)
 
+def register_acess_controller(request):
+    if request.method == 'POST':
+        user = user_register(request)
+        phone = request.POST['phone']
+        profile_image = None
+        organization = request.POST['organization']
+        try:
+            profile_image = request.FILES['profile_image']
+            if profile_image:
+                original_name = profile_image.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                profile_image.name = unique_name
+        except:
+            pass
+        if user:
+            login_default(request,user)
+            user.save()
+            group = Group.objects.get(name='AcessControllers')
+            group.user_set.add(user)
+            acess_controller_kwargs = {
+                'user_id': user,
+                'phone': phone,
+                'profile_image':profile_image,
+                'organization':organization
+            }
+            acess_controller = AcessController.objects.create(**acess_controller_kwargs)
+            acess_controller.save()
+            return HttpResponseRedirect(
+                reverse('qualafesta:acess_controller'))
+    else:
+        form = AcessControllerRegistrationForm()
+    context = {'form': form, 'type_user':'acess_controller'}
+    return render(request, 'user_controll/register.html', context)
 
+
+
+######################################################################## Customer Views
 @login_required
 #@group_required('Customer')
 def customer_index(request):
     return render(request, 'customer/customer_index.html', {})
 
+
+######################################################################## Organizer Views
 @login_required
 def organizer_index(request):
     return render(request, 'organizer/organizer_index.html', {})
+
+
+######################################################################## Acesss Controller Views
+@login_required
+def acess_controller_index(request):
+    return render(request, 'acess_controller/acess_controller_index.html', {})
