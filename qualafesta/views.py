@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -12,7 +12,6 @@ from qualafesta.decorators import group_required
 
 
 def index(request):
-    print(request.user.is_authenticated)
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qualafesta:login"))
     return render(request, 'index.html', {})
@@ -35,13 +34,15 @@ def login(request):
             context['organizer'] = organizer
             return render(request, 'organizer/organizer_index.html', context)
         except: pass
+        if request.user.is_superuser:
+            return redirect('/admin/')
     
     form = AuthenticationForm()
     context = {'form': form}
     return render(request, 'user_controll/login.html', context)
 
-def logout(request):
-    return render(request, 'user_controll/login.html', {})
+#def logout(request):
+#    return render(request, 'user_controll/login.html', {})
 
 def register(request):
     return render(request, 'user_controll/register.html', {})
@@ -96,7 +97,6 @@ def register_customer(request):
     return render(request, 'user_controll/register.html', context)
 
 def register_organizer(request):
-    print(request)
     if request.method == 'POST':
         user = user_register(request)
         phone = request.POST['phone']
@@ -134,10 +134,8 @@ def register_organizer(request):
 @login_required
 #@group_required('Customer')
 def customer_index(request):
-    print(request.user, request.user.is_authenticated)
     return render(request, 'customer/customer_index.html', {})
 
 @login_required
 def organizer_index(request):
-    print(request.user, request.user.is_authenticated)
     return render(request, 'organizer/organizer_index.html', {})

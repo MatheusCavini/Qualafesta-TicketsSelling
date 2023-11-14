@@ -22,6 +22,8 @@ class Organizer(models.Model):
     
 class AcessController(models.Model):
     profile_image = models.ImageField(upload_to='images/profile_images/', blank=True, null=True)
+    organization = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
 
     def __str__(self):
         return f"acess controller"
