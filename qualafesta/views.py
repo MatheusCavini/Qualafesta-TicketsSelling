@@ -7,7 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
 import uuid
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
 
 
@@ -27,13 +27,18 @@ def login(request):
             context={'user':user}
         try:
             customer = Customer.objects.get(user_id=user)
-            context['customer'] = customer
-            return render(request, 'customer/customer_index.html', context)
+            return HttpResponseRedirect(
+                reverse('qualafesta:customer'))
         except: pass
         try:
             organizer = Organizer.objects.get(user_id=user)
-            context['organizer'] = organizer
-            return render(request, 'organizer/organizer_index.html', context)
+            return HttpResponseRedirect(
+                reverse('qualafesta:organizer'))
+        except: pass
+        try:
+            acess_controller = AcessController.objects.get(user_id=user)
+            return HttpResponseRedirect(
+                reverse('qualafesta:acess_controller'))
         except: pass
         if request.user.is_superuser:
             return redirect('/admin/')
@@ -165,19 +170,30 @@ def register_acess_controller(request):
 
 
 ######################################################################## Customer Views
+def is_customer(user):
+    return user.groups.filter(name='Customers').exists()
+
 @login_required
-#@group_required('Customer')
+@user_passes_test(is_customer)
 def customer_index(request):
     return render(request, 'customer/customer_index.html', {})
 
 
 ######################################################################## Organizer Views
+def is_organizer(user):
+    return user.groups.filter(name='Organizers').exists()
+
 @login_required
+@user_passes_test(is_organizer)
 def organizer_index(request):
     return render(request, 'organizer/organizer_index.html', {})
 
 
 ######################################################################## Acesss Controller Views
+def is_acess_controller(user):
+    return user.groups.filter(name='AcessControllers').exists()
+
 @login_required
+@user_passes_test(is_acess_controller)
 def acess_controller_index(request):
     return render(request, 'acess_controller/acess_controller_index.html', {})
