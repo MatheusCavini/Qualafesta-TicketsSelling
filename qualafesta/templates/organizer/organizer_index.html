@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+organizer
+{% endblock title %}
+
+{% block content %}
+<h1>organizer</h1>
+<a href="{% url 'qualafesta:logout' %}">logout</a>
+
+
+{% if user.is_authenticated %}
+<p>pagina do usuario</p>
+{% else %}
+
+{% endif %}
+
+
+{% endblock %}

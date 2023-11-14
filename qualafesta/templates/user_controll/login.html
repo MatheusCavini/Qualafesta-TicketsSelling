@@ -6,7 +6,7 @@ login
 
 {% block content %}
 <h2>login</h2>
-<a href="{% url 'qualafesta:register' %}">registrar</a>
+<a href="{% url 'qualafesta:register_customer' %}">registrar</a>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
