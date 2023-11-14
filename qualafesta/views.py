@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
 import uuid
 from django.contrib.auth.decorators import login_required, permission_required
+from qualafesta.decorators import group_required
 
 
 def index(request):
@@ -66,7 +67,7 @@ def register_customer(request):
     if request.method == 'POST':
         user = user_register(request)
         phone = request.POST['phone']
-        profile_image = request.POST['profile_image']
+        profile_image = None
         try:
             profile_image = request.FILES['profile_image']
             if profile_image:
@@ -99,7 +100,7 @@ def register_organizer(request):
     if request.method == 'POST':
         user = user_register(request)
         phone = request.POST['phone']
-        profile_image = request.POST['profile_image']
+        profile_image = None
         cnpj = request.POST['cnpj']
         try:
             profile_image = request.FILES['profile_image']
@@ -131,6 +132,7 @@ def register_organizer(request):
 
 
 @login_required
+#@group_required('Customer')
 def customer_index(request):
     print(request.user, request.user.is_authenticated)
     return render(request, 'customer/customer_index.html', {})
