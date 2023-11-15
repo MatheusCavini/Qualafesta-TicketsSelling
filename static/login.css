@@ -1,0 +1,135 @@
+body{
+    background-color: #4B02B3; 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100vh;
+}
+
+.loginArea{
+    width: 40rem;
+    height: 45rem;
+    background-color: #fff;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#logo{
+    width: 30rem;
+    height: 7.5rem;
+}
+
+button{
+    display: flex;
+    width: 11.25rem;
+    height: 3.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    background:  #6B02FF;
+    color: #fff;
+    font-size: 1.5rem;
+    border: 0;
+    margin-top: 32px;
+}
+
+label{
+    display: none;
+}
+
+input{
+    display: flex;
+    width: 30rem;
+    height: 2.5rem;
+    padding: 0.625rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: 1px solid #505261;
+    background: #FFF;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin: 8px;
+}
+
+a{
+    color: #6B02FF;
+    font-family: Montserrat;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-decoration: none;
+    margin: 16px;
+}
+
+@media only screen and (max-width: 767px) {
+    .loginArea{
+        width: 100vw;
+        height: 100vh;
+        background-color: #fff;
+        border-radius: 0 0 32rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    #logo{
+        width: 36rem;
+        height: 8rem;
+    }
+    
+    button{
+        display: flex;
+        width: 15rem;
+        height: 5rem;
+        padding: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 0.5rem;
+        background:  #6B02FF;
+        color: #fff;
+        font-size: 2rem;
+        border: 0;
+        margin-top: 32px;
+    }
+    
+    label{
+        display: none;
+    }
+    
+    input{
+        display: flex;
+        width: 32rem;
+        height: 3rem;
+        padding: 0.625rem 1rem;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 0.5rem;
+        border: 1px solid #505261;
+        background: #FFF;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+        margin: 8px;
+    }
+    input::placeholder{
+        font-size: 2rem;
+    }
+    
+    a{
+        color: #6B02FF;
+        font-family: Montserrat;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        text-decoration: none;
+        margin: 16px;
+    }
+}

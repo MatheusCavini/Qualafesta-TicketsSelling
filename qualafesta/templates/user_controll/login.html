@@ -1,17 +1,34 @@
-{% extends 'base.html' %}
+{% load static %} 
 
-{% block title %}
-login
-{% endblock title %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<h2>login</h2>
-<a href="{% url 'qualafesta:register_customer' %}">registrar</a>
-<form method="post">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>
+        Qualafesta - Login
+    </title>
+</head>
+
+<body>
+<div class="loginArea">
+<img id="logo" src="{% static '/images/logoFull.png' %}"/>
+<form method="post" style="display: flex; align-items: center; flex-direction: column;">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">entrar</button>
+<button type="submit">ENTRAR</button>
+<a href="{% url 'qualafesta:register_customer' %}">CADASTRAR</a>
 
 </form>
+</div>
+</body>
+</html>
 
-{% endblock content %} 
+

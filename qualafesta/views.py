@@ -10,6 +10,13 @@ import uuid
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
 
+class CustomAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Set placeholders for the username and password fields
+        self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
+        self.fields['password'].widget.attrs['placeholder'] = 'Senha'
 
 ######################################################################## Login Views
 def index(request):
@@ -43,7 +50,7 @@ def login(request):
         if request.user.is_superuser:
             return redirect('/admin/')
     
-    form = AuthenticationForm()
+    form = CustomAuthenticationForm()
     context = {'form': form}
     return render(request, 'user_controll/login.html', context)
 
