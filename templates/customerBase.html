@@ -8,13 +8,17 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerMain.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    {% block style %}  {% endblock style %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body class="customerBody">
     <div class="navbarRegion">
         <div class="navbar">
             <img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo">
-            <img class="navIcon" src="{% if request.path == '/customer' %}{% static '/images/homeIcon.svg' %}{%else%}{% static '/images/homeIconActive.svg' %}{% endif %}" alt="Logo">
+            <a href="{% url 'qualafesta:customer' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
             <img class="navIcon" src="{% static '/images/searchIcon.svg' %}" alt="Logo">
             <img id="navIconCal" src="{% static '/images/calendarIcon.svg' %}" alt="Logo">
             <img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo">

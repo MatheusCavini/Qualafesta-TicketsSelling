@@ -9,6 +9,8 @@ from django.contrib.auth import login as login_default
 import uuid
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
+from django.views import generic
+from .models import Event
 
 
 ######################################################################## Login Views
@@ -177,6 +179,14 @@ def is_customer(user):
 #@user_passes_test(is_customer)
 def customer_index(request):
     return render(request, 'customer/customer_index.html', {})
+
+class EventAboutView(generic.DetailView):
+    model = Event
+    template_name = 'customer/customer_eventAbout.html'
+
+class EventAttractionsView(generic.DetailView):
+    model = Event
+    template_name = 'customer/customer_eventAttractions.html'
 
 
 ######################################################################## Organizer Views
