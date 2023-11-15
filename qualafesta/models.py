@@ -46,8 +46,8 @@ class Event(models.Model):
 class ArtistParticipation(models.Model):
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     artist_name = models.CharField(max_length=255)
-    begin_time = models.DateField()
-    end_time = models.DateField()
+    begin_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     artist_image = models.ImageField(upload_to='images/artist_images/', blank=True, null=True)
 
     def __str__(self):
