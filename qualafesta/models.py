@@ -67,7 +67,7 @@ class TicketCattegory(models.Model):
 class TicketsOrder(models.Model):
     customer_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_date = models.DateTimeField()
-    payment_situation = models.BooleanField(default=False)
+    payment_situation = models.IntegerField(default=1) #1 pra aguardando, 0 pra aceito e 2 pra rejeitado
     total_price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
@@ -75,11 +75,11 @@ class TicketsOrder(models.Model):
 
 
 class PurchasedTicket(models.Model):
-    acess_controller_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    acess_controller_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     ticket_order_id = models.ForeignKey(TicketsOrder, on_delete=models.CASCADE)
     ticket_category_id = models.ForeignKey(TicketCattegory, on_delete=models.CASCADE)
     hash_code = models.CharField(max_length=255)
-    entrance = models.DateField()
+    entrance = models.DateField(blank=True, null=True)
     status = models.BooleanField(default=False)
 
     def __str__(self):
