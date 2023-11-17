@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from qualafesta.decorators import group_required
 from django.views import generic
 from .models import Event
+from django.shortcuts import get_object_or_404
 
 
 ######################################################################## Login Views
@@ -187,6 +188,11 @@ class EventAboutView(generic.DetailView):
 class EventAttractionsView(generic.DetailView):
     model = Event
     template_name = 'customer/customer_eventAttractions.html'
+
+def TicketsListViews(request):
+    ticketsorder = TicketsOrder.objects.filter(customer_id=request.user.id)
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    return render(request, 'customer/customer_ticketsList.html', {'ticketsorder': ticketsorder, 'user_instance':user_instance})
 
 
 ######################################################################## Organizer Views

@@ -1,0 +1,67 @@
+{% extends 'customerBase.html' %}
+{% load static %} 
+
+{% block title %}Meus Ingressos{% endblock title%}
+
+{% block style %}  
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerTickets.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+<div class="header">
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
+    <img class="profileImage" src="{{user_instance.profile_image.url}}"/>
+    <div class="headerInfo">
+        <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
+        <p class="welcome">Bem-vindo ao App Qualafesta!</p>
+    </div>
+    </div>
+    <a href="/logout"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
+</div>
+
+<h1 class="meusIngressos">MEUS INGRESSOS</h1>
+
+
+
+
+{% if ticketsorder %}
+<div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y:scroll;">
+{% for order in ticketsorder|dictsortreversed:"order_date" %}
+    <h2 style="font-size: 2rem; margin: 32px 0 0px 0;">Pedido de {{order.order_date|date:"d/m/Y - H:i"}} </h2>
+    
+    {% regroup order.purchasedticket_set.all by ticket_category_id as ticket_categories %}
+
+    {% for category in ticket_categories %}
+    <div class="paymentColor c{{order.payment_situation}}" >
+    <div class="ticketCard">
+        
+        <img class="thumb" src="{{category.list.0.ticket_category_id.event_id.thumb_image.url}}"/>
+        <div>
+        <h2 style="font-size: 2rem;">{{ category.list.0.ticket_category_id.event_id.name }}</h2>
+        <h3 class="categName" >{{ category.list.0.ticket_category_id.name }}</h2>
+        
+        </div>
+        <h2 style="font-size: 3rem;">x{{ category.list|length }} </h2>
+        <a><img src="{% if order.payment_situation == 1 %}{% static '/images/QRIcon.svg' %}{%else%}{% static '/images/QRBlurIcon.svg' %}{% endif %}" height="40px"/></a>
+    </div>
+    </div>
+    {% endfor %}
+        
+        
+
+        
+    
+    {% endfor %}
+
+{% else %}
+
+<p style="font-size: 2rem; font-weight: 500; text-align: center;"> AS ATRAÇÕES AINDA NÃO FORAM DIVULGADAS.</p>
+<p>{{request.user.name}}</p>
+</div>
+{%endif%}
+    
+
+
+</div>
+{% endblock content %}

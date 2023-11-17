@@ -3,10 +3,11 @@
     flex-direction: row;
     align-items: center;
     background-color: #fafafa;
+    height: 100vh;
 }
 
 .navbarRegion{
-    width: 18rem;
+    width: 15vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -50,11 +51,12 @@
         align-items: center;
         width: 100vw;
         height: 100vh;
+        box-sizing: border-box;
     }
 
     .navbarRegion{
         width: 100vw;
-        height: auto;
+        height: 9rem;
     }
 
     .navbar{
@@ -67,13 +69,14 @@
         align-items: center;
         flex-shrink: 0;
         border-radius: 0rem;
-        background: var(--Surface, #FFF);
-        box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.25);
+        background: #FFF;
     }
 
     .logo{
         display: none;
         flex: 0;
     }
+
+    
 
 }
