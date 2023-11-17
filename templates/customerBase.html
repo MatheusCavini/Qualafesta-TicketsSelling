@@ -17,7 +17,7 @@
 <body class="customerBody">
     <div class="navbarRegion" style="height: 9rem;">
         <div class="navbar">
-            <a href="{% url 'qualafesta:customer' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
+            <a class="hideWhenMobile" href="{% url 'qualafesta:customer' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
             <a href="{% url 'qualafesta:customer' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
             <img class="navIcon" src="{% static '/images/searchIcon.svg' %}" alt="Logo">
             <a href="{% url 'qualafesta:ticketsList' %}"><img id="navIconCal" src="{% if request.path == '/customer/ticketsList/' %}{% static '/images/calendarIconActive.svg' %}{%else%}{% static '/images/calendarIcon.svg' %}{% endif %}" alt="Logo"></a>

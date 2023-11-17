@@ -77,6 +77,12 @@
         flex: 0;
     }
 
+    .hideWhenMobile{
+        display: none;
+        flex: 0;
+    
+    }
+
     
 
 }
