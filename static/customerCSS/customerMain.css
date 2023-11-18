@@ -15,6 +15,10 @@
     align-items: center;
 }
 
+.content{
+    height: 100%;
+}
+
 .navbar{
     display: flex;
     width: 7.5rem;
@@ -56,13 +60,13 @@
 
     .navbarRegion{
         width: 100vw;
-        height: 9rem;
+        height: 10vh;
     }
 
     .navbar{
         display: flex;
         width: 100vw;
-        height: 9rem;
+        height: 10vh;
         flex-direction:row;
         padding: 0;
         justify-content: space-around;
@@ -81,6 +85,10 @@
         display: none;
         flex: 0;
     
+    }
+
+    .content{
+        height: 90vh;
     }
 
     

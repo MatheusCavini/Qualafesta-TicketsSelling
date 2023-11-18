@@ -11,7 +11,7 @@
 <div class="container">
 <div class="header">
     <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
-    <img class="profileImage" src="{{user_instance.profile_image.url}}"/>
+    <img class="profileImage" src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
     <div class="headerInfo">
         <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
         <p class="welcome">Bem-vindo ao App Qualafesta!</p>
@@ -56,8 +56,9 @@
 
 {% else %}
 
-<p style="font-size: 2rem; font-weight: 500; text-align: center;"> AS ATRAÇÕES AINDA NÃO FORAM DIVULGADAS.</p>
-<p>{{request.user.name}}</p>
+<div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <p style="font-size: 2rem; font-weight: 500; text-align: center;"> VOCÊ AINDA NÃO COMPROU INGRESSOS.</p>
+</div>
 </div>
 {%endif%}
     
