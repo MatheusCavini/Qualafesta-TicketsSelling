@@ -13,13 +13,6 @@ from django.views import generic
 from .models import Event
 from django.shortcuts import get_object_or_404
 
-class CustomAuthenticationForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Set placeholders for the username and password fields
-        self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
-        self.fields['password'].widget.attrs['placeholder'] = 'Senha'
 
 ######################################################################## Login Views
 def index(request):
