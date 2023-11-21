@@ -12,6 +12,9 @@ from qualafesta.decorators import group_required
 from django.views import generic
 from .models import Event
 from django.shortcuts import get_object_or_404
+import qrcode
+from django.http import HttpResponse
+from django.shortcuts import render
 
 
 ######################################################################## Login Views
@@ -171,7 +174,6 @@ def register_acess_controller(request):
     return render(request, 'user_controll/register.html', context)
 
 
-
 ######################################################################## Customer Views
 def is_customer(user):
     return user.groups.filter(name='Customers').exists()
@@ -193,6 +195,25 @@ def TicketsListViews(request):
     ticketsorder = TicketsOrder.objects.filter(customer_id=request.user.id)
     user_instance = get_object_or_404(Customer, user_id=request.user.id)
     return render(request, 'customer/customer_ticketsList.html', {'ticketsorder': ticketsorder, 'user_instance':user_instance})
+
+def generate_qr_code(request, text):
+    # Create a QR code instance
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=0,
+    )
+    qr.add_data(text)
+    qr.make(fit=True)
+
+    # Create an image from the QR code instance
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    # Response with the image content
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
 
 
 ######################################################################## Organizer Views
