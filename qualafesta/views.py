@@ -216,7 +216,12 @@ def organizer_index(request):
 def is_acess_controller(user):
     return user.groups.filter(name='AcessControllers').exists()
 
-@login_required
-@user_passes_test(is_acess_controller)
-def acess_controller_index(request):
-    return render(request, 'acess_controller/acess_controller_index.html', {})
+#@login_required
+#@user_passes_test(is_acess_controller)
+class EventViews(generic.ListView):
+    model = Event
+    template_name = 'acess_controller/acess_controller_index.html'
+
+class EventControllView(generic.DetailView):
+    model = Event
+    template_name = 'acess_controller/controll_event.html'
