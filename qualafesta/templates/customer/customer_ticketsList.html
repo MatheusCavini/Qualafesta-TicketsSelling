@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var hashes = btn.querySelectorAll('p');
             hashes = Array.from(hashes).map(hash => hash.innerText);
             console.log(hashes);
+            hashText.style.fontSize = '3rem';
 
             if (btn.parentElement.className == "paymentColor c1") {
                 var count = 0;
