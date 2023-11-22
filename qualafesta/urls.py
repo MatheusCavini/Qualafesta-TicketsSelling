@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/acess_controller',  views.register_acess_controller, name='register_acess_controller'),
     path('customer/', views.customer_index, name='customer'),
     path('organizer/', views.organizer_index, name='organizer'),
+    path('organizer/events', views.organizer_events, name='organizer_events'),
     path('acess_controller/', views.acess_controller_index, name='acess_controller'),
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),

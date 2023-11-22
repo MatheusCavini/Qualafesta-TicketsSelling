@@ -220,11 +220,15 @@ def generate_qr_code(request, text):
 def is_organizer(user):
     return user.groups.filter(name='Organizers').exists()
 
-#@login_required
-#@user_passes_test(is_organizer)
+@login_required
+@user_passes_test(is_organizer)
 def organizer_index(request):
-    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    user_instance = get_object_or_404(Organizer, user_id=request.user.id)
     return render(request, 'organizer/organizer_index.html', {"user_instance":user_instance})
+
+def organizer_events(request):
+    user_instance = get_object_or_404(Organizer, user_id=request.user.id)
+    return render(request, 'organizer/organizer_events.html', {"user_instance":user_instance})
 
 
 ######################################################################## Acesss Controller Views
