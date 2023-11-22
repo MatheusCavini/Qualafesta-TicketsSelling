@@ -14,6 +14,8 @@ urlpatterns = [
     path('organizer/', views.organizer_index, name='organizer'),
     path('acess_controller/', views.EventViews.as_view(), name='acess_controller'),
     path('acess_controller/controll_event<int:pk>/', views.EventControllView.as_view(), name='controll_event'),
+    path('scan/', views.scan_qr, name='scan_qr'),
+    path('acess_controller/controll_event<int:pk>/ticket_detail', views.ticket_detail, name='ticket_detail'),
 
 
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),

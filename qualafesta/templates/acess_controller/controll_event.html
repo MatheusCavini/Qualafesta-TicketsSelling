@@ -4,13 +4,69 @@
 {% block title %}Evento - {{event.name}}{% endblock title%}
 
 {% block style %}  
-<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+<!--<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    // Obter acesso à câmera do usuário
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            // Chama a função para processar cada quadro
+            setInterval(processVideo, 1000); // Chama a cada segundo
+        })
+        .catch(err => {
+            console.error('Erro ao acessar a câmera: ', err);
+        });
+
+    function processVideo() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Converter o canvas para base64
+        const imageBase64 = canvas.toDataURL('image/png');
+
+        canvas.toBlob(blob => {
+            //const formData = new FormData();
+            //formData.append('image', blob, 'image.png');
+            jsonData = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: imageBase64 })
+        };
+            console.log('jsonData', jsonData)
+
+            fetch('/scan/', jsonData)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Faça algo com os dados do QR code decodificado
+            })
+            .catch(error => {
+                console.error('Erro ao enviar imagem: ', error);
+            });
+        }, 'image/png');
+    }
+});
+</script>
 {% endblock style %}
 
 
 {% block content %}
 <h1>{{event.name}}</h2>
-
+<!--<video id="video" width="640" height="480" autoplay></video>
+<canvas id="canvas" style="display:none;"></canvas>-->
+<form action="{% url 'qualafesta:ticket_detail'  %}">
+    <p>
+        <input class="input_cattegory" type="text" name="query" id="id_query" />
+    </p>
+    <button class="search" type="submit">Buscar</button>
+</form> 
 <!--<div style="display: flex;flex-direction: row; height: 100%;">
 <div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;"></div>
 <div class="splashImage" style="background-image: url({{event.splash_images.url}}); background-size: 100vw;">

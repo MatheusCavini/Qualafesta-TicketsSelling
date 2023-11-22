@@ -1,17 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
-import uuid
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from qualafesta.decorators import group_required
 from django.views import generic
 from .models import Event
-from django.shortcuts import get_object_or_404
+import uuid
+import json
+
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -225,3 +225,59 @@ class EventViews(generic.ListView):
 class EventControllView(generic.DetailView):
     model = Event
     template_name = 'acess_controller/controll_event.html'
+
+def ticket_detail(request, pk):
+    return 
+
+import cv2
+from pyzbar.pyzbar import decode
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import base64
+from PIL import Image
+from io import BytesIO
+import json
+
+import base64
+
+def pad_base64(data):
+    # Calculate the remainder when the length is divided by 4
+    padding_needed = len(data) % 4
+    
+    if padding_needed != 0:
+        # Calculate the number of padding characters needed
+        padding_length = 4 - padding_needed
+        
+        # Add the required padding characters ('=')
+        data = data + '=' * padding_length
+
+    return data
+
+@csrf_exempt
+def scan_qr(request):
+    if request.method == 'POST':
+        received_data = json.loads(request.body)
+        image_data = received_data.get('image')
+        #image_data = pad_base64(image_data)
+
+        # Decode base64 image data
+        image_base64 = base64.b64decode(image_data)
+
+        # Create a PIL image from the decoded data
+        image = Image.open(BytesIO(image_base64))
+
+        # Decode QR code from the image
+        decoded_objects = decode(image)
+        print(image_base64)
+
+        if decoded_objects:
+            # If there are decoded objects (QR codes) in the image
+            qr_data = decoded_objects[0].data.decode('utf-8')
+            # Perform actions with the QR code data
+            print("QR Code Data:", qr_data)
+            return JsonResponse({'qr_code_data': qr_data})
+        else:
+            # If no QR code is found in the image
+            return JsonResponse({'message': 'No QR code found in the image'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
