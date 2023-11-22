@@ -1,0 +1,87 @@
+.header{
+    display: flex;
+    width: 85vw;
+    padding: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    box-sizing: border-box;
+    
+}
+.container{
+    display: flex;flex-direction: column; 
+    justify-content: start; 
+    width: 85vw; 
+    height: 100%;
+}
+
+
+.headerInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.userName{
+    color: #1E2732; 
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 600;
+    font-feature-settings: 'clig' off, 'liga' off;
+}
+
+.welcome{
+    color: #1E2732;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    margin: 1rem 0;
+}
+
+.profileImage{
+    width: 6rem;
+    height: 6rem;
+    border-radius: 7rem;
+}
+
+@media only screen and (max-width: 767px) {
+    .header{
+        display: flex;
+        width: 100vw;
+        padding: 1.5rem;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        box-sizing: border-box;
+        
+    }
+
+    .headerInfo{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .userName{
+        color: #1E2732; 
+        font-size: 1.8rem;
+        font-style: normal;
+        font-weight: 600;
+        font-feature-settings: 'clig' off, 'liga' off;
+    }
+    
+    .welcome{
+        color: #1E2732;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 500;
+        margin: 1rem 0;
+    }
+    
+
+    .profileImage{
+        width: 6rem;
+        height: 6rem;
+        border-radius: 7rem;
+    }
+}

@@ -4,14 +4,186 @@
 {% block title %}Meus Ingressos{% endblock title%}
 
 {% block style %}  
+
 <link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerTickets.css' %}">
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('modal');
+    var btns = document.getElementsByClassName('ticketCard');
+    var content = document.getElementById('modalContent');
+    var hashText = document.createElement('p');
+    var qcode = document.createElement('img');
+    var block = document.createElement('img');
+    var counter = document.createElement('p');
+    var counterZone = document.createElement('div');
+    counterZone.className = "counterZone";
+   
+
+    var rightArrowClicable = document.createElement('img');
+    var rightArrowNonClicable = document.createElement('img');
+    var leftArrowClicable = document.createElement('img');
+    var leftArrowNonClicable = document.createElement('img');
+
+    rightArrowClicable.src = "{% static '/images/RAC.svg' %}";
+    rightArrowNonClicable.src = "{% static '/images/RANC.svg' %}";
+    leftArrowClicable.src = "{% static '/images/LAC.svg' %}";
+    leftArrowNonClicable.src = "{% static '/images/LANC.svg' %}";
+
+    rightArrowClicable.style.width = "2rem";
+    rightArrowNonClicable.style.width = "2rem";
+    leftArrowClicable.style.width = "2rem";
+    leftArrowNonClicable.style.width = "2rem";
+
+    rightArrowClicable.style.margin = "0 4rem";
+    rightArrowNonClicable.style.margin = "0 4rem";
+    leftArrowClicable.style.margin = "0 4rem";
+    leftArrowNonClicable.style.margin = "0 4rem";
+
+    block.src = "{% static '/images/block.svg' %}";
+    qcode.style.width = '20rem';
+
+    var msg = document.createElement('p');
+    msg.innerHTML = "Conclua a compra para acessar o QR CODE";
+    msg.style.fontSize = '1.5rem';
+
+
+    for (let btn of btns) {
+        btn.onclick = function () {
+            modal.style.display = 'flex';
+            var hashes = btn.querySelectorAll('p');
+            hashes = Array.from(hashes).map(hash => hash.innerText);
+            console.log(hashes);
+            hashText.style.fontSize = '3rem';
+
+            if (btn.parentElement.className == "paymentColor c1") {
+                var count = 0;
+                content.appendChild(counterZone);
+                if (hashes.length > 1){
+                    counterZone.appendChild(leftArrowNonClicable);
+                }
+                counter.innerHTML = (count + 1) + " de " + hashes.length;
+                counterZone.appendChild(counter);
+                if (hashes.length > 1){
+                    counterZone.appendChild(rightArrowClicable);
+                }
+                hashText.innerHTML = hashes[count];
+                content.appendChild(qcode);
+                qcode.src = "{% url 'qualafesta:generate_qr_code' text='placeholder' %}".replace('placeholder', encodeURIComponent(hashes[count]));
+                content.appendChild(hashText);
+                qcode.style.width = '22rem';
+
+                rightArrowClicable.onclick = function () {
+                    if (count + 1 < hashes.length){
+                       
+                        while (content.firstChild) {
+                            content.removeChild(content.firstChild);
+                        }
+                        
+                       
+                        while (counterZone.firstChild) {
+                            counterZone.removeChild(counterZone.firstChild);
+                        }
+                
+                        
+                        count = count + 1;
+                        
+                        counter.innerHTML = (count + 1) + " de " + hashes.length ;
+                        content.appendChild(counterZone)
+                        if(count ==0){
+                            counterZone.appendChild(leftArrowNonClicable);
+
+                        }else{
+                            counterZone.appendChild(leftArrowClicable);
+                        }
+                        counterZone.appendChild(counter);
+                        if((count +1) == hashes.length){
+                            counterZone.appendChild(rightArrowNonClicable);
+
+                        }else{
+                            counterZone.appendChild(rightArrowClicable);
+                        }
+                        hashText.innerHTML = hashes[count];
+                        content.appendChild(qcode);
+                        qcode.src = "{% url 'qualafesta:generate_qr_code' text='placeholder' %}".replace('placeholder', encodeURIComponent(hashes[count]));
+                        content.appendChild(hashText);
+                        qcode.style.width = '22rem';
+                    }
+                    
+                };
+
+                leftArrowClicable.onclick = function () {
+                    if (count - 1 >= 0){
+                       
+                        while (content.firstChild) {
+                            content.removeChild(content.firstChild);
+                        }
+                        
+                       
+                        while (counterZone.firstChild) {
+                            counterZone.removeChild(counterZone.firstChild);
+                        }
+                        
+                        count = count - 1;
+
+                        counter.innerHTML = (count + 1) + " de " + hashes.length ;
+                        content.appendChild(counterZone)
+                        if(count ==0){
+                            counterZone.appendChild(leftArrowNonClicable);
+
+                        }else{
+                            counterZone.appendChild(leftArrowClicable);
+                        }
+                        counterZone.appendChild(counter);
+                        if((count +1) == hashes.length){
+                            counterZone.appendChild(rightArrowNonClicable);
+
+                        }else{
+                            counterZone.appendChild(rightArrowClicable);
+                        }
+                        hashText.innerHTML = hashes[count];
+                        content.appendChild(qcode);
+                        qcode.src = "{% url 'qualafesta:generate_qr_code' text='placeholder' %}".replace('placeholder', encodeURIComponent(hashes[count]));
+                        content.appendChild(hashText);
+                        qcode.style.width = '22rem';
+                    }
+                    
+                };
+            } else {
+                console.log(btn.parentElement.className);
+                hashText.innerHTML = "INGRESSO INDISPONÍVEL";
+                hashText.style.fontSize = '2rem';
+                content.appendChild(hashText);
+                content.appendChild(block);
+                content.appendChild(msg);
+                msg.style.fontWeight = "500";
+            }
+        };
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            while (content.firstChild) {
+                content.removeChild(content.firstChild);
+            };
+            while (counterZone.firstChild) {
+                counterZone.removeChild(counterZone.firstChild);
+            }
+                        
+            modal.style.display = 'none';
+        }
+    };
+});
+</script>
+
+
 {% endblock style %}
 
 {% block content %}
 <div class="container">
 <div class="header">
     <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
-    <img class="profileImage" src="{{user_instance.profile_image.url}}"/>
+    <img class="profileImage" src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
     <div class="headerInfo">
         <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
         <p class="welcome">Bem-vindo ao App Qualafesta!</p>
@@ -35,15 +207,17 @@
     {% for category in ticket_categories %}
     <div class="paymentColor c{{order.payment_situation}}" >
     <div class="ticketCard">
-        
         <img class="thumb" src="{{category.list.0.ticket_category_id.event_id.thumb_image.url}}"/>
         <div>
         <h2 style="font-size: 2rem;">{{ category.list.0.ticket_category_id.event_id.name }}</h2>
         <h3 class="categName" >{{ category.list.0.ticket_category_id.name }}</h2>
+        {% for ticket in category.list %}
+        <p style="display:none;">{{ ticket.hash_code}}</p>
+        {% endfor %}
         
         </div>
         <h2 style="font-size: 3rem;">x{{ category.list|length }} </h2>
-        <a><img src="{% if order.payment_situation == 1 %}{% static '/images/QRIcon.svg' %}{%else%}{% static '/images/QRBlurIcon.svg' %}{% endif %}" height="40px"/></a>
+        <img src="{% if order.payment_situation == 1 %}{% static '/images/QRIcon.svg' %}{%else%}{% static '/images/QRBlurIcon.svg' %}{% endif %}" height="40px"/>
     </div>
     </div>
     {% endfor %}
@@ -56,12 +230,17 @@
 
 {% else %}
 
-<p style="font-size: 2rem; font-weight: 500; text-align: center;"> AS ATRAÇÕES AINDA NÃO FORAM DIVULGADAS.</p>
-<p>{{request.user.name}}</p>
+<div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <p style="font-size: 2rem; font-weight: 500; text-align: center;"> VOCÊ AINDA NÃO COMPROU INGRESSOS.</p>
+</div>
 </div>
 {%endif%}
-    
-
-
 </div>
+
+
+<div id="modal">
+    <div id="modalContent">
+    </div>
+</div>
+
 {% endblock content %}

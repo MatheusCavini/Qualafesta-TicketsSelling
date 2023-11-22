@@ -12,14 +12,10 @@ from .models import Event
 import uuid
 import json
 
+import qrcode
+from django.http import HttpResponse
+from django.shortcuts import render
 
-class CustomAuthenticationForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Set placeholders for the username and password fields
-        self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
-        self.fields['password'].widget.attrs['placeholder'] = 'Senha'
 
 ######################################################################## Login Views
 def index(request):
@@ -178,13 +174,12 @@ def register_acess_controller(request):
     return render(request, 'user_controll/register.html', context)
 
 
-
 ######################################################################## Customer Views
 def is_customer(user):
     return user.groups.filter(name='Customers').exists()
 
-#@login_required
-#@user_passes_test(is_customer)
+@login_required
+@user_passes_test(is_customer)
 def customer_index(request):
     return render(request, 'customer/customer_index.html', {})
 
@@ -201,15 +196,35 @@ def TicketsListViews(request):
     user_instance = get_object_or_404(Customer, user_id=request.user.id)
     return render(request, 'customer/customer_ticketsList.html', {'ticketsorder': ticketsorder, 'user_instance':user_instance})
 
+def generate_qr_code(request, text):
+    # Create a QR code instance
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=0,
+    )
+    qr.add_data(text)
+    qr.make(fit=True)
+
+    # Create an image from the QR code instance
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    # Response with the image content
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
+
 
 ######################################################################## Organizer Views
 def is_organizer(user):
     return user.groups.filter(name='Organizers').exists()
 
-@login_required
-@user_passes_test(is_organizer)
+#@login_required
+#@user_passes_test(is_organizer)
 def organizer_index(request):
-    return render(request, 'organizer/organizer_index.html', {})
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    return render(request, 'organizer/organizer_index.html', {"user_instance":user_instance})
 
 
 ######################################################################## Acesss Controller Views
