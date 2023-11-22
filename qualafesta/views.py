@@ -178,8 +178,8 @@ def register_acess_controller(request):
 def is_customer(user):
     return user.groups.filter(name='Customers').exists()
 
-#@login_required
-#@user_passes_test(is_customer)
+@login_required
+@user_passes_test(is_customer)
 def customer_index(request):
     return render(request, 'customer/customer_index.html', {})
 
