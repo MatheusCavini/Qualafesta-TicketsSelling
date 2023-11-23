@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
@@ -8,13 +8,17 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
 from django.views import generic
+from django.test import RequestFactory
 from .models import Event
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from pyzbar.pyzbar import decode
+import numpy as np
 import uuid
+import cv2
+import base64
 import json
-
 import qrcode
-from django.http import HttpResponse
-from django.shortcuts import render
 
 
 ######################################################################## Login Views
@@ -241,58 +245,48 @@ class EventControllView(generic.DetailView):
     model = Event
     template_name = 'acess_controller/controll_event.html'
 
+def get_ticket_data(ticket_hash, event_id):
+    purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+    #print('\n',purchased_ticket, purchased_ticket.ticket_order_id)
+    ticket_order = purchased_ticket.ticket_order_id
+    user = ticket_order.customer_id 
+    #print(user.first_name, user.last_name, user)
+    customer = Customer.objects.get(user_id=user.id)
+    context ={
+        'first_name':user.first_name,
+        'last_name':user.last_name,
+        'profile_image': customer.profile_image,
+        'user':user,
+        'correct':True
+
+    }
+    return context
+
+
 def ticket_detail(request, pk):
-    return 
+    print(request)
+    ticket_hash = request.GET['query']
+    context = get_ticket_data(ticket_hash, pk)
+    return render(request, 'acess_controller/ticket_data.html', context)
 
-import cv2
-from pyzbar.pyzbar import decode
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import base64
-from PIL import Image
-from io import BytesIO
-import json
-
-import base64
-
-def pad_base64(data):
-    # Calculate the remainder when the length is divided by 4
-    padding_needed = len(data) % 4
-    
-    if padding_needed != 0:
-        # Calculate the number of padding characters needed
-        padding_length = 4 - padding_needed
-        
-        # Add the required padding characters ('=')
-        data = data + '=' * padding_length
-
-    return data
 
 @csrf_exempt
 def scan_qr(request):
     if request.method == 'POST':
         received_data = json.loads(request.body)
+        event_id = received_data.get('event_id')
         image_data = received_data.get('image')
-        #image_data = pad_base64(image_data)
-
-        # Decode base64 image data
-        image_base64 = base64.b64decode(image_data)
-
-        # Create a PIL image from the decoded data
-        image = Image.open(BytesIO(image_base64))
-
-        # Decode QR code from the image
-        decoded_objects = decode(image)
-        print(image_base64)
-
+        image_data = base64.b64decode(image_data.split(',')[1])
+        nparr = np.frombuffer(image_data, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        decoded_objects = decode(gray_img)
         if decoded_objects:
-            # If there are decoded objects (QR codes) in the image
             qr_data = decoded_objects[0].data.decode('utf-8')
-            # Perform actions with the QR code data
-            print("QR Code Data:", qr_data)
-            return JsonResponse({'qr_code_data': qr_data})
+            context = get_ticket_data(qr_data, event_id)
+            print(request)
+            return render(request, 'acess_controller/ticket_data.html', context)
         else:
-            # If no QR code is found in the image
-            return JsonResponse({'message': 'No QR code found in the image'})
+            return JsonResponse({'message': 'Nenhum QR code encontrado'})
     else:
         return JsonResponse({'error': 'Invalid request method'})

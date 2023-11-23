@@ -9,6 +9,7 @@
     document.addEventListener('DOMContentLoaded', function () {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
+    const event_id = document.getElementById('event-data').dataset.eventId;
     const context = canvas.getContext('2d');
 
     // Obter acesso à câmera do usuário
@@ -37,9 +38,8 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ image: imageBase64 })
+            body: JSON.stringify({ image: imageBase64, event_id:event_id})
         };
-            console.log('jsonData', jsonData)
 
             fetch('/scan/', jsonData)
             .then(response => response.json())
@@ -58,10 +58,11 @@
 
 
 {% block content %}
+<div id="event-data" data-event-id="{{ event.id }}"></div>
 <h1>{{event.name}}</h2>
-<!--<video id="video" width="640" height="480" autoplay></video>
-<canvas id="canvas" style="display:none;"></canvas>-->
-<form action="{% url 'qualafesta:ticket_detail'  %}">
+<video id="video" width="640" height="480" autoplay></video>
+<canvas id="canvas" style="display:none;"></canvas>
+<form action="{% url 'qualafesta:ticket_detail' event.id  %}">
     <p>
         <input class="input_cattegory" type="text" name="query" id="id_query" />
     </p>

@@ -8,6 +8,12 @@
 
 
 {% block content %}
-<p>{{ticket.hash}}</p>
+{% if correct %}
+    <p>{{first_name}}</p>
+    <p>{{last_name}}</p>
+    <img src="{% get_media_prefix %}{{ profile_image }}" alt="Imagem de perfil">
+{% else %}
+    <p>{{error_message}}</p>
+{% endif %}
 
 {% endblock content %}
