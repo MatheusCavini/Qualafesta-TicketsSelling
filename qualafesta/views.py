@@ -19,6 +19,7 @@ import cv2
 import base64
 import json
 import qrcode
+from datetime import datetime
 
 
 ######################################################################## Login Views
@@ -253,21 +254,31 @@ def get_ticket_data(ticket_hash, event_id):
     #print(user.first_name, user.last_name, user)
     customer = Customer.objects.get(user_id=user.id)
     context ={
+        'ticket_hash': ticket_hash,
+        'event_id': event_id,
         'first_name':user.first_name,
         'last_name':user.last_name,
         'profile_image': customer.profile_image,
         'user':user,
         'correct':True
-
     }
     return context
 
-
+@csrf_exempt
 def ticket_detail(request, pk):
-    print(request)
     ticket_hash = request.GET['query']
     context = get_ticket_data(ticket_hash, pk)
+    print(context)
     return render(request, 'acess_controller/ticket_data.html', context)
+
+def validate_ticket(request, event_id, ticket_hash):
+    purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+    controller_user = request.user
+    purchased_ticket.acess_controller_id = controller_user
+    purchased_ticket.status = True
+    purchased_ticket.entrance = datetime.now()
+    purchased_ticket.save()
+    return redirect(f'/acess_controller/controll_event{str(event_id)}')
 
 
 @csrf_exempt
@@ -283,10 +294,10 @@ def scan_qr(request):
         decoded_objects = decode(gray_img)
         if decoded_objects:
             qr_data = decoded_objects[0].data.decode('utf-8')
-            context = get_ticket_data(qr_data, event_id)
-            print(request)
-            return render(request, 'acess_controller/ticket_data.html', context)
+            #context = get_ticket_data(qr_data, event_id)
+            return redirect('/acess_controller/controll_event1/ticket_detail?query=aaaa')
+            return JsonResponse({'message': 'QR code decodificado com sucesso', 'hash_code':qr_data})
         else:
-            return JsonResponse({'message': 'Nenhum QR code encontrado'})
+            return JsonResponse({'message': 'Nenhum QR code encontrado', 'hash_code':None})
     else:
         return JsonResponse({'error': 'Invalid request method'})

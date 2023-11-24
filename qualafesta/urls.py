@@ -16,6 +16,7 @@ urlpatterns = [
     path('acess_controller/controll_event<int:pk>/', views.EventControllView.as_view(), name='controll_event'),
     path('scan/', views.scan_qr, name='scan_qr'),
     path('acess_controller/controll_event<int:pk>/ticket_detail', views.ticket_detail, name='ticket_detail'),
+    path('acess_controller/controll_event<int:event_id>/validate/<str:ticket_hash>', views.validate_ticket, name='validate_ticket'),
 
 
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
