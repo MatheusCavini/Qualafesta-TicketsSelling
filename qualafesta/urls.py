@@ -18,8 +18,6 @@ urlpatterns = [
     path('acess_controller/controll_event<int:pk>/ticket_detail', views.ticket_detail, name='ticket_detail'),
     path('acess_controller/controll_event<int:event_id>/validate/<str:ticket_hash>', views.validate_ticket, name='validate_ticket'),
     path('scan/', views.scan_qr, name='scan_qr'),
-
-
     path('organizer/events', views.organizer_events, name='organizer_events'),
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),

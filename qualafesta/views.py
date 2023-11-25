@@ -27,6 +27,24 @@ from django.db.models import Q
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qualafesta:login"))
+    user = request.user
+    try:
+        customer = Customer.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:customer'))
+    except: pass
+    try:
+        organizer = Organizer.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:organizer'))
+    except: pass
+    try:
+        acess_controller = AcessController.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:acess_controller'))
+    except: pass
+    if request.user.is_superuser:
+        return redirect('/admin/')
     return render(request, 'index.html', {})
 
 def login(request):
