@@ -23,6 +23,7 @@
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const currentUrl = window.location.href;
         // Converter o canvas para base64
         const imageBase64 = canvas.toDataURL('image/png');
 
@@ -40,13 +41,15 @@
             fetch('/scan/', jsonData)
             .then(response => response.json())
             .then(data => {
-                const hash = data.hash_code
                 console.log(data)
-                if (hash !=null){
-                    console.log(hash)
-                   fetch('/acess_controller/controll_event1/ticket_detail?query=aaaa', { method: 'POST',
-                    query:'aaaa'
-                   })  
+                const hash = data.hash_code;
+                const redirectUrl = data.redirect_url;
+                if (hash !== null) {
+                    console.log(hash);
+                }
+                if (redirectUrl) {
+                    const newUrl = currentUrl + redirectUrl;
+                    window.location.href = newUrl;
                 }
             })
             .catch(error => {
@@ -81,29 +84,4 @@ document.getElementById('searchForm').addEventListener('submit', function (event
         <button style="margin: 3vh;" class="search" type="submit">Buscar</button>
     </form>
 </div>
-
-<!--<div style="display: flex;flex-direction: row; height: 100%;">
-<div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;"></div>
-<div class="splashImage" style="background-image: url({{event.splash_images.url}}); background-size: 100vw;">
-    <div class="aboutContent">
-        <h1 id="eventName">{{event.name}}</h1>
-        <div class="divLine"></div>
-        <div id="tabs">
-            <a href="{% url 'qualafesta:aboutEvent' event.id%}"><h3 class="tabName" style="color: #4B02B3;">SOBRE</h3></a>
-            <a href="{% url 'qualafesta:attractionsEvent' event.id%}"><h3 class="tabName">ATRAÇÕES</h3></a>
-            <a><h3 class="tabName">INGRESSOS</h3></a>
-        </div>
-        <div style="overflow-y: scroll;">
-        <h3 class="sectionName">DESCRIÇÃO</h3>
-        <p class="eventInfo">{{event.description}}</p>
-        <h3 class="sectionName">INFORMAÇÕES</h3>
-        <p class="eventInfo">DATA: {{event.date_time|date:"d/m/Y, H:i"}}</p>
-        <p class="eventInfo">LOCAL: {{event.location}}</p>
-        </div>
-        
-
-    </div>
-</div>
-</div>
--->
 {% endblock content %} 

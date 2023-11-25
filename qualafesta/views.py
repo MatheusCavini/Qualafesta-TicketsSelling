@@ -247,25 +247,33 @@ class EventControllView(generic.DetailView):
     template_name = 'acess_controller/controll_event.html'
 
 def get_ticket_data(ticket_hash, event_id):
-    purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
-    ticket_order = purchased_ticket.ticket_order_id
-    user = ticket_order.customer_id 
-    customer = Customer.objects.get(user_id=user.id)
-    context ={
-        'ticket_hash': ticket_hash,
-        'event_id': event_id,
-        'first_name':user.first_name,
-        'last_name':user.last_name,
-        'profile_image': customer.profile_image,
-        'user':user,
-        'correct':True,
-    }
-    #if purchased_ticket.status:
-    #    context['correct'] = False
-    #    context['error_message'] ='Este ingresso já foi validado'
-    #elif ticket_order.payment_situation != 0:
-    #    context['correct'] = False
-    #    context['error_message'] ='O pagamento deste ingresso não foi efetuado'
+    try:
+        purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+        ticket_order = purchased_ticket.ticket_order_id
+        user = ticket_order.customer_id 
+        customer = Customer.objects.get(user_id=user.id)
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'profile_image': customer.profile_image,
+            'user':user,
+            'correct':True,
+        }
+        if purchased_ticket.status:
+            context['correct'] = False
+            context['error_message'] ='Este ingresso já foi validado'
+        elif ticket_order.payment_situation != 0:
+            context['correct'] = False
+            context['error_message'] ='O pagamento deste ingresso não foi efetuado'
+    except:
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'correct':False,
+            'error_message':'Ingresso não encontrado'
+        }
     return context
 
 @csrf_exempt
@@ -297,10 +305,12 @@ def scan_qr(request):
         decoded_objects = decode(gray_img)
         if decoded_objects:
             qr_data = decoded_objects[0].data.decode('utf-8')
-            #context = get_ticket_data(qr_data, event_id)
-            return redirect('/acess_controller/controll_event1/ticket_detail?query=aaaa')
-            return JsonResponse({'message': 'QR code decodificado com sucesso', 'hash_code':qr_data})
+            redirect_url = f'ticket_detail?query={qr_data}'
+            return JsonResponse({'message': 'QR code decodificado com sucesso', 
+                                 'redirect_url': redirect_url,
+                                 'hash_code': qr_data})
         else:
-            return JsonResponse({'message': 'Nenhum QR code encontrado', 'hash_code':None})
+            return JsonResponse({'message': 'Nenhum QR code encontrado', 
+                                 'redirect_url':None,'hash_code':None})
     else:
         return JsonResponse({'error': 'Invalid request method'})

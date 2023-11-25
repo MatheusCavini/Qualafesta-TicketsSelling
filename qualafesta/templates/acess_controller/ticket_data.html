@@ -4,6 +4,7 @@
 {% block style %}{% endblock style %}
 {% block content %}
 {% if correct %}
+<a href="{% url 'qualafesta:controll_event' event_id %}"><img src="{% static '/images/LAC.svg' %}" style="width: 1.5rem; margin: 0 1.5rem;"></a>
 <div class="eventsSpot" style="gap:3vh">
     <div class="aboutContent">
         <h1 id="eventName">Cliente: {{first_name}} {{last_name}}</h1>
