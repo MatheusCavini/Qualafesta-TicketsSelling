@@ -19,6 +19,8 @@ urlpatterns = [
     path('acess_controller/controll_event<int:event_id>/validate/<str:ticket_hash>', views.validate_ticket, name='validate_ticket'),
 
 
+    path('organizer/events', views.organizer_events, name='organizer_events'),
+    path('acess_controller/', views.acess_controller_index, name='acess_controller'),
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),
     path('customer/ticketsList/', views.TicketsListViews, name='ticketsList'),
