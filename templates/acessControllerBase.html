@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-16">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'acessControllerCSS/acessControllerMain.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,22 +13,20 @@
     {% block style %}  {% endblock style %}
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="customerBody">
-    <div class="navbarRegion" style="height: 9rem;">
-        <div class="navbar">
-            <a class="hideWhenMobile" href="{% url 'qualafesta:customer' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
-            <a href="{% url 'qualafesta:customer' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
-            <img class="navIcon" src="{% static '/images/searchIcon.svg' %}" alt="Logo">
-            <a href="{% url 'qualafesta:ticketsList' %}"><img id="navIconCal" src="{% if request.path == '/customer/ticketsList/' %}{% static '/images/calendarIconActive.svg' %}{%else%}{% static '/images/calendarIcon.svg' %}{% endif %}" alt="Logo"></a>
-            <img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo">
-
+<body >
+    <header>
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
+            <img style="width: 6rem; height: 6rem; border-radius: 7rem;" src="{% if acess_controller.profile_image %}{{acess_controller.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
+            <div class="headerInfo">
+                <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
+                <p class="welcome">Bem-vindo ao App Qualafesta!</p>
+            </div>
         </div>
-    </div>
-    <div class="content" style="height: 100%;">
+        <a href="{% url 'qualafesta:logout' %}"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
+    </header>
+    <div class="content">
         {% block content %}
         {% endblock content %}
     </div>
-    
-    
 </body>
 </html>

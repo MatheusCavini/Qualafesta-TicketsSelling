@@ -1,4 +1,4 @@
-{% extends 'customerBase.html' %}
+{% extends 'acessControllerBase.html' %}
 {% load static %} 
 
 {% block title %}Evento - {{event.name}}{% endblock title%}
@@ -11,7 +11,6 @@
     const canvas = document.getElementById('canvas');
     const event_id = document.getElementById('event-data').dataset.eventId;
     const context = canvas.getContext('2d');
-
     // Obter acesso à câmera do usuário
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
@@ -44,8 +43,14 @@
             fetch('/scan/', jsonData)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                // Faça algo com os dados do QR code decodificado
+                const hash = data.hash_code
+                console.log(data)
+                if (hash !=null){
+                    console.log(hash)
+                   fetch('/acess_controller/controll_event1/ticket_detail?query=aaaa', { method: 'POST',
+                    query:'aaaa'
+                   })  
+                }
             })
             .catch(error => {
                 console.error('Erro ao enviar imagem: ', error);
@@ -58,16 +63,23 @@
 
 
 {% block content %}
-<div id="event-data" data-event-id="{{ event.id }}"></div>
-<h1>{{event.name}}</h2>
-<video id="video" width="640" height="480" autoplay></video>
-<canvas id="canvas" style="display:none;"></canvas>
-<form action="{% url 'qualafesta:ticket_detail' event.id  %}">
-    <p>
-        <input class="input_cattegory" type="text" name="query" id="id_query" />
-    </p>
-    <button class="search" type="submit">Buscar</button>
-</form> 
+<div class="eventsSpot" style="gap:3vh">
+        <div id="event-data" data-event-id="{{ event.id }}"></div>
+    <div class="aboutContent">
+        <h1 id="eventName">{{event.name}}</h1>
+        <h2 id="eventName">{{event.date_time}}</h2>
+    </div>
+    <video id="video" width="300" height="300" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <form class="formHash" action="{% url 'qualafesta:ticket_detail' event.id  %}">
+        <p>
+            <input class="input_cattegory" type="text" name="query" id="id_query" placeholder="Ticket Hash" />
+        </p>
+        <button class="search" type="submit">Buscar</button>
+    </form> 
+
+</div>
+
 <!--<div style="display: flex;flex-direction: row; height: 100%;">
 <div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;"></div>
 <div class="splashImage" style="background-image: url({{event.splash_images.url}}); background-size: 100vw;">

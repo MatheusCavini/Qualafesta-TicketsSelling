@@ -11,7 +11,11 @@
 {% if correct %}
     <p>{{first_name}}</p>
     <p>{{last_name}}</p>
-    <img src="{% get_media_prefix %}{{ profile_image }}" alt="Imagem de perfil">
+    <p>{{event_id}}</p>
+
+    <img style="height: 30%;"src="{% get_media_prefix %}{{ profile_image }}" alt="Imagem de perfil">
+    <a href="{% url 'qualafesta:validate_ticket' event_id=event_id ticket_hash=ticket_hash%}">validar</a>
+
 {% else %}
     <p>{{error_message}}</p>
 {% endif %}

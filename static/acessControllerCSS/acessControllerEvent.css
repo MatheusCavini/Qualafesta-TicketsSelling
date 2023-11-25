@@ -1,5 +1,6 @@
 .splashImageWeb{
     width: 40vw;
+    border: red solid;
     height: 100vh;
     flex-shrink: 0;
     display: flex;

@@ -1,52 +1,18 @@
 {% extends 'acessControllerBase.html' %}
 {% load static %} 
 
-{% block title %}Evento - {{event.name}}{% endblock title%}
-
-{% block style %}  
-<link rel="stylesheet" type="text/css" href="{% static 'acessControllerCSS/acessControllerEvent.css' %}">
-{% endblock style %}
-
-
 {% block content %}
-{% for event in event_list %}
-<h1>{{event.name}}</h2>
-<a href="{% url 'qualafesta:controll_event' event.id%}">clique para controlar</a>
+<div class="eventsSpot">
+    {% for event in event_list %}
+    <div class="controllContent">
+        <img class="splashImageWeb" src="{{event.splash_images.url}}" alt="">
+        <div class="aboutContent">
+            <h1 id="eventName">{{event.name}}</h1>
+            <h2 id="eventName">{{event.date_time}}</h2>
+        </div>
+        <a class="controll" href="{% url 'qualafesta:controll_event' event.id%}">Controlar</a>
 
-<!--<div style="display: flex;flex-direction: row; height: 100%;">
-<div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;"></div>
-<div class="splashImage" style="background-image: url({{event.splash_images.url}}); background-size: 100vw;">
-    <div class="aboutContent">
-        <h1 id="eventName">{{event.name}}</h1>
-        <div class="divLine"></div>
-        <div id="tabs">
-            <a href="{% url 'qualafesta:aboutEvent' event.id%}"><h3 class="tabName" >SOBRE</h3></a>
-            <a href="{% url 'qualafesta:attractionsEvent' event.id%}"><h3 class="tabName " style="color: #4B02B3;">ATRAÇÕES</h3></a>
-            <a><h3 class="tabName">INGRESSOS</h3></a>
-        </div>
-        {% if event.artistparticipation_set.all %}
-        <div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y: scroll;">
-            {% for artist in event.artistparticipation_set.all %}
-                <div class="artistCard"> 
-                <img  width="9rem" height="10.5rem" class="artistImage" src = "{% if artist.artist_image %}{{artist.artist_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/> 
-                <div class="artistInfo">
-                    <h2 style="font-size: 2.5rem;">{{artist.artist_name}}</h2>
-                    <h3 style="font-size: 1.7rem;">{{artist.begin_time|date:"H:i"}} - {{artist.end_time|date:"H:i"}}</h3>
-
-                </div>
-                </div>
-            
-            {% endfor %}
-        </div>
-        {% else %}
-        <div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <p style="font-size: 2rem; font-weight: 500; text-align: center;"> AS ATRAÇÕES AINDA NÃO FORAM DIVULGADAS.</p>
-        </div>
-        {%endif%}
     </div>
-</div>
-</div>
--->
-
 {% endfor %}
+</div>
 {% endblock content %}

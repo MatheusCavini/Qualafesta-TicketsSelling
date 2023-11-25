@@ -1,32 +1,91 @@
-.customerBody{
+
+body{
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     background-color: #fafafa;
-    height: 100vh;
+    border: green solid;
 }
 
-.navbarRegion{
-    width: 15vw;
-    height: 100vh;
+
+header{
+    display: flex;
+    width: 100vw;
+    padding: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    box-sizing: border-box;    
+}
+
+.headerInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.userName{
+    color: #1E2732; 
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 600;
+    font-feature-settings: 'clig' off, 'liga' off;
+}
+
+.welcome{
+    color: #1E2732;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    margin: 1rem 0;
+}
+
+.profileImage{
+    width: 6rem;
+    height: 6rem;
+    border-radius: 7rem;
+}
+.eventsSpot{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 6vh;
+    height: 100%;
+
+}
+
+.input_cattegory{
+    border: blueviolet solid;
+    border-radius: 2vh;
+    width: 30vw;
+    height: 6vh;
+    padding-left: 1vw;
+}
+
+button.search{
+    margin: 2vh;
+    width: 14vw;
+    height: 6vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: blueviolet solid;
+    color: #FFF;
+    background-color: blueviolet;
+    border-radius: 1vh;
+    font-weight: 600;
+    font-size: medium;    
+    text-decoration: none;
 }
 
-.navbar{
+form.formHash{
     display: flex;
-    width: 7.5rem;
-    height: 40rem;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 2rem;
-    padding-top: 32px;
-    flex-shrink: 0;
-    border-radius: 1rem;
-    background: var(--Surface, #FFF);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    flex-direction: column;
 }
 
 .logo{
@@ -42,36 +101,72 @@
 #navIconCal{
     width: 5.8rem;
 }
+.controllContent{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    border-radius: 2vh;
+    padding: 5vh;
+}
+.splashImageWeb{
+    border-radius: 3vh;
+    height: 25vh;
+    width: 25vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    background-color: blueviolet;
+    overflow: hidden;
+    border: solid;
+}
+
+.aboutContent{
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+}
+
+a.controll{
+    margin: 2vh;
+    width: 14vw;
+    height: 6vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: blueviolet solid;
+    color: #FFF;
+    background-color: blueviolet;
+    border-radius: 1vh;
+    font-weight: 600;
+    font-size: medium;    
+    text-decoration: none;
+
+}
+
+video.video{
+    border: #1E2732 solid;
+    height: 25vh;
+
+}
 
 @media only screen and (max-width: 767px) {
-    .customerBody{
+   
+    .controllContent{
         display: flex;
-        flex-direction: column-reverse;
-        justify-content:flex-start;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        width: 100vw;
-        height: 100vh;
-        box-sizing: border-box;
+        border: solid;
+        border-radius: 2vh;
+        padding: 5vh;
     }
-
-    .navbarRegion{
-        width: 100vw;
-        height: 9rem;
-    }
-
-    .navbar{
-        display: flex;
-        width: 100vw;
-        height: 9rem;
-        flex-direction:row;
-        padding: 0;
-        justify-content: space-around;
-        align-items: center;
-        flex-shrink: 0;
-        border-radius: 0rem;
-        background: #FFF;
-    }
-
     .logo{
         display: none;
         flex: 0;
