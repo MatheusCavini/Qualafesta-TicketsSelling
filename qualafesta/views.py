@@ -259,8 +259,8 @@ def organizer_events(request):
 def is_acess_controller(user):
     return user.groups.filter(name='AcessControllers').exists()
 
-#@login_required
-#@user_passes_test(is_acess_controller)
+@login_required
+@user_passes_test(is_acess_controller)
 @csrf_exempt
 def search_event_controller(request):
     try:
@@ -269,7 +269,7 @@ def search_event_controller(request):
         events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
         if len(events)>0:
             context['event_list'] = events
-            context['search_message'] = f'Resultados para a busca "{search}"'
+            context['search_message'] = f'Resultados para a busca de "{search}"'
             return render(request, 'acess_controller/acess_controller_index.html', context)
         else:
             context['error_message'] = f'Nenhum evento encontrado para a busca "{search}"'
@@ -277,10 +277,8 @@ def search_event_controller(request):
             return render(request, 'acess_controller/search_event_controller.html', context)
     except:
         return render(request, 'acess_controller/search_event_controller.html', {})
-    
-    
-
-class EventViews(generic.ListView):
+      
+class EventControllerViews(generic.ListView):
     model = Event
     template_name = 'acess_controller/acess_controller_index.html'
 
@@ -318,12 +316,16 @@ def get_ticket_data(ticket_hash, event_id):
         }
     return context
 
+@login_required
+@user_passes_test(is_acess_controller)
 @csrf_exempt
 def ticket_detail(request, pk):
     ticket_hash = request.GET['query']
     context = get_ticket_data(ticket_hash, pk)
     return render(request, 'acess_controller/ticket_data.html', context)
 
+@login_required
+@user_passes_test(is_acess_controller)
 @csrf_exempt
 def validate_ticket(request, event_id, ticket_hash):
     purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
@@ -334,7 +336,8 @@ def validate_ticket(request, event_id, ticket_hash):
     purchased_ticket.save()
     return redirect(f'/acess_controller/controll_event{str(event_id)}')
 
-
+@login_required
+@user_passes_test(is_acess_controller)
 @csrf_exempt
 def scan_qr(request):
     if request.method == 'POST':
