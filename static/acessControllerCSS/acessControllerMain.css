@@ -1,6 +1,6 @@
 
 body{
-    width: 100%;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,6 +52,7 @@ header{
     align-items: center;
     gap: 6vh;
     height: 100%;
+    margin-bottom: 12vh;
 }
 
 .userProfileImage{
@@ -59,7 +60,6 @@ header{
     height: 25vh;
     width: 25vw;
     overflow: hidden;
-    border: orange solid;
 }
 
 .input_cattegory{
@@ -85,6 +85,7 @@ button.search{
     font-weight: 600;
     font-size: medium;    
     text-decoration: none;
+    cursor: pointer;
 }
 
 form.formHash{
@@ -92,6 +93,37 @@ form.formHash{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+
+.navbarRegion{
+    width: 15vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+}
+
+.content{
+    height: 100%;
+    z-index: 0;
+}
+
+.navbar{
+    display: flex;
+    width: 7.5rem;
+    height: 32rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding-top: 32px;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    background: var(--Surface, #FFF);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .logo{
@@ -108,14 +140,17 @@ form.formHash{
     width: 5.8rem;
 }
 
+
 .controllContent{
+    margin-left: 12vw;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    border: solid;
     border-radius: 2vh;
     padding: 5vh;
+    background: var(--Surface, #FFF);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .splashImageWeb{
@@ -156,6 +191,13 @@ a.controll{
     font-size: medium;    
     text-decoration: none;
 }
+.bodyNav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100vw;
+    height: 100%;
+}
 
 @media only screen and (max-width: 767px) {
    
@@ -164,10 +206,33 @@ a.controll{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        border: solid;
         border-radius: 2vh;
         padding: 5vh;
+        background: var(--Surface, #FFF);
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     }
+
+    .navbarRegion{
+        width: 100vw;
+        height: 10vh;
+        position: fixed;
+        bottom: 0;
+        z-index: 1000;
+    }
+
+    .navbar{
+        display: flex;
+        width: 100vw;
+        height: 10vh;
+        flex-direction:row;
+        padding: 0;
+        justify-content: space-around;
+        align-items: center;
+        flex-shrink: 0;
+        border-radius: 0rem;
+        background: #FFF;
+    }
+
     .logo{
         display: none;
         flex: 0;

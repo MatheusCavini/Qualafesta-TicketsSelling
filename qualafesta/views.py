@@ -20,6 +20,7 @@ import base64
 import json
 import qrcode
 from datetime import datetime
+from django.db.models import Q
 
 
 ######################################################################## Login Views
@@ -242,6 +243,25 @@ def is_acess_controller(user):
 
 #@login_required
 #@user_passes_test(is_acess_controller)
+@csrf_exempt
+def search_event_controller(request):
+    try:
+        context = {}
+        search = request.GET['search_event_controller']
+        events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if len(events)>0:
+            context['event_list'] = events
+            context['search_message'] = f'Resultados para a busca "{search}"'
+            return render(request, 'acess_controller/acess_controller_index.html', context)
+        else:
+            context['error_message'] = f'Nenhum evento encontrado para a busca "{search}"'
+            print(context)
+            return render(request, 'acess_controller/search_event_controller.html', context)
+    except:
+        return render(request, 'acess_controller/search_event_controller.html', {})
+    
+    
+
 class EventViews(generic.ListView):
     model = Event
     template_name = 'acess_controller/acess_controller_index.html'
@@ -286,6 +306,7 @@ def ticket_detail(request, pk):
     context = get_ticket_data(ticket_hash, pk)
     return render(request, 'acess_controller/ticket_data.html', context)
 
+@csrf_exempt
 def validate_ticket(request, event_id, ticket_hash):
     purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
     controller_user = request.user

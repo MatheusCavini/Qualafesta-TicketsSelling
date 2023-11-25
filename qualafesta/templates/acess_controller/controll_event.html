@@ -68,7 +68,6 @@ document.getElementById('searchForm').addEventListener('submit', function (event
 
 
 {% block content %}
-<a href="{% url 'qualafesta:acess_controller' %}"><img src="{% static '/images/LAC.svg' %}" style="width: 1.5rem; margin: 0 1.5rem;"></a>
 <div class="eventsSpot" style="gap:3vh">
         <div id="event-data" data-event-id="{{ event.id }}"></div>
     <div class="aboutContent">

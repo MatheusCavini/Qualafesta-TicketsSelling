@@ -13,10 +13,11 @@ urlpatterns = [
     path('customer/', views.customer_index, name='customer'),
     path('organizer/', views.organizer_index, name='organizer'),
     path('acess_controller/', views.EventViews.as_view(), name='acess_controller'),
+    path('acess_controller/search/', views.search_event_controller, name='search_event_controller'),
     path('acess_controller/controll_event<int:pk>/', views.EventControllView.as_view(), name='controll_event'),
-    path('scan/', views.scan_qr, name='scan_qr'),
     path('acess_controller/controll_event<int:pk>/ticket_detail', views.ticket_detail, name='ticket_detail'),
     path('acess_controller/controll_event<int:event_id>/validate/<str:ticket_hash>', views.validate_ticket, name='validate_ticket'),
+    path('scan/', views.scan_qr, name='scan_qr'),
 
 
     path('organizer/events', views.organizer_events, name='organizer_events'),
