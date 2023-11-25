@@ -248,10 +248,8 @@ class EventControllView(generic.DetailView):
 
 def get_ticket_data(ticket_hash, event_id):
     purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
-    #print('\n',purchased_ticket, purchased_ticket.ticket_order_id)
     ticket_order = purchased_ticket.ticket_order_id
     user = ticket_order.customer_id 
-    #print(user.first_name, user.last_name, user)
     customer = Customer.objects.get(user_id=user.id)
     context ={
         'ticket_hash': ticket_hash,
@@ -260,15 +258,20 @@ def get_ticket_data(ticket_hash, event_id):
         'last_name':user.last_name,
         'profile_image': customer.profile_image,
         'user':user,
-        'correct':True
+        'correct':True,
     }
+    #if purchased_ticket.status:
+    #    context['correct'] = False
+    #    context['error_message'] ='Este ingresso já foi validado'
+    #elif ticket_order.payment_situation != 0:
+    #    context['correct'] = False
+    #    context['error_message'] ='O pagamento deste ingresso não foi efetuado'
     return context
 
 @csrf_exempt
 def ticket_detail(request, pk):
     ticket_hash = request.GET['query']
     context = get_ticket_data(ticket_hash, pk)
-    print(context)
     return render(request, 'acess_controller/ticket_data.html', context)
 
 def validate_ticket(request, event_id, ticket_hash):

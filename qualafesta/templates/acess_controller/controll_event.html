@@ -1,8 +1,5 @@
 {% extends 'acessControllerBase.html' %}
 {% load static %} 
-
-{% block title %}Evento - {{event.name}}{% endblock title%}
-
 {% block style %}  
 <!--<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">-->
 <script>
@@ -58,11 +55,17 @@
         }, 'image/png');
     }
 });
+
+document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        document.getElementById('id_query').value = '';
+    });
 </script>
 {% endblock style %}
 
 
 {% block content %}
+<a href="{% url 'qualafesta:acess_controller' %}"><img src="{% static '/images/LAC.svg' %}" style="width: 1.5rem; margin: 0 1.5rem;"></a>
 <div class="eventsSpot" style="gap:3vh">
         <div id="event-data" data-event-id="{{ event.id }}"></div>
     <div class="aboutContent">
@@ -71,13 +74,12 @@
     </div>
     <video id="video" width="300" height="300" autoplay></video>
     <canvas id="canvas" style="display:none;"></canvas>
-    <form class="formHash" action="{% url 'qualafesta:ticket_detail' event.id  %}">
+    <form class="formHash" id="searchForm" action="{% url 'qualafesta:ticket_detail' event.id %}">
         <p>
             <input class="input_cattegory" type="text" name="query" id="id_query" placeholder="Ticket Hash" />
         </p>
-        <button class="search" type="submit">Buscar</button>
-    </form> 
-
+        <button style="margin: 3vh;" class="search" type="submit">Buscar</button>
+    </form>
 </div>
 
 <!--<div style="display: flex;flex-direction: row; height: 100%;">
