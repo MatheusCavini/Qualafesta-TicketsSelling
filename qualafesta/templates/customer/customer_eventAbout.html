@@ -19,7 +19,7 @@
         <div id="tabs">
             <a href="{% url 'qualafesta:aboutEvent' event.id%}"><h3 class="tabName" style="color: #4B02B3;">SOBRE</h3></a>
             <a href="{% url 'qualafesta:attractionsEvent' event.id%}"><h3 class="tabName">ATRAÇÕES</h3></a>
-            <a><h3 class="tabName">INGRESSOS</h3></a>
+            <a href="{% url 'qualafesta:ticketsEvent' event.id%}"><h3 class="tabName">INGRESSOS</h3></a>
         </div>
         <div style="overflow-y: scroll;">
         <h3 class="sectionName">DESCRIÇÃO</h3>

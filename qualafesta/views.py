@@ -215,6 +215,10 @@ def generate_qr_code(request, text):
     img.save(response, "PNG")
     return response
 
+class EventTicketsView(generic.DetailView):
+    model = Event
+    template_name = 'customer/customer_eventTickets.html'
+
 
 ######################################################################## Organizer Views
 def is_organizer(user):

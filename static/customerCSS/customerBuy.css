@@ -1,0 +1,118 @@
+.buy {
+    position: fixed;
+    bottom: 12vh; /* You can adjust the value to change the distance from the bottom of the screen */
+    right: 50%; /* You can adjust the value to change the distance from the right side of the screen */
+    z-index: 1;
+    display: flex;
+    width: 25rem;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.5rem;
+    background: #4B02B3;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-size: 2rem;
+    border: 0;
+    transform: translateX(50%);
+}
+
+.buy:hover{
+    cursor: pointer;
+}
+
+.qntBut:hover{
+    cursor: pointer;
+}
+
+.inactive {
+    position: fixed;
+    bottom: 12vh; /* You can adjust the value to change the distance from the bottom of the screen */
+    right: 50%; /* You can adjust the value to change the distance from the right side of the screen */
+    z-index: 1;
+    display: flex;
+    width: 25rem;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.5rem;
+    background: #9c9c9c;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-size: 2rem;
+    border: 0;
+    transform: translateX(50%);
+}
+
+#modal{
+    z-index: 4;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 85vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#modalContent{
+    display: flex;
+    width: 40rem;
+    height: 40rem;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 1rem;
+    background:#FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+
+
+#modalContent{
+    display: flex;
+    width: 40rem;
+    height: 40rem;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 1rem;
+    background:#FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+#modal p{
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+
+@media only screen and (max-width: 767px) {
+    #modal{
+        z-index: 2;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.25);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #modalContent{
+        display: flex;
+        width: 35rem;
+        height: 35rem;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: 1rem;
+        background:#FFF;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        }
+}

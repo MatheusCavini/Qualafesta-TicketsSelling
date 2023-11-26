@@ -16,6 +16,7 @@ urlpatterns = [
     path('acess_controller/', views.acess_controller_index, name='acess_controller'),
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),
+    path('customer/event/tickets/<int:pk>/', views.EventTicketsView.as_view(), name='ticketsEvent'),
     path('customer/ticketsList/', views.TicketsListViews, name='ticketsList'),
     path('qr-code/<str:text>/', views.generate_qr_code, name='generate_qr_code'),
     
