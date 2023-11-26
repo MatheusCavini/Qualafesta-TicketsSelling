@@ -276,6 +276,9 @@ def create_purchased_tickets(request):
                     ticket_category_id=ticket_category,
                     hash_code = code,
                 )
+                ticket_category.sold_amount += 1
+                ticket_category.save()
+                print(ticket_category.sold_amount)
 
         return JsonResponse({'success': True, 'message': 'Purchased tickets created successfully'})
     else:
