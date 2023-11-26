@@ -58,36 +58,82 @@
     align-items: center;
 }
 
-#modalContent{
+#modal2{
+    z-index: 4;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 85vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#modalContent {
     display: flex;
     width: 40rem;
-    height: 40rem;
+    height: 30rem;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     border-radius: 1rem;
     background:#FFF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: 16px;
+    box-sizing: border-box;
     }
+    #modalContent2{
+        display: flex;
+        width: 40rem;
+        height: 30rem;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: 1rem;
+        background:#FFF;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        padding: 16px;
+        box-sizing: border-box;
+        }
 
 
-#modalContent{
-    display: flex;
-    width: 40rem;
-    height: 40rem;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 1rem;
-    background:#FFF;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    }
 #modal p{
     font-weight: 700;
     font-size: 3rem;
     margin-bottom: 1rem;
 }
 
+#modal2 p{
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.pay{
+    display: flex;
+    width: 15rem;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.5rem;
+    background: #4B02B3;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-size: 2rem;
+    border: 0;
+}
+input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+}
 
 @media only screen and (max-width: 767px) {
     #modal{
@@ -107,7 +153,7 @@
     #modalContent{
         display: flex;
         width: 35rem;
-        height: 35rem;
+        height: 30rem;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
@@ -115,4 +161,30 @@
         background:#FFF;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         }
+
+        #modal2{
+            z-index: 2;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.25);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #modalContent2{
+            display: flex;
+            width: 35rem;
+            height: 30rem;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 1rem;
+            background:#FFF;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            }
 }

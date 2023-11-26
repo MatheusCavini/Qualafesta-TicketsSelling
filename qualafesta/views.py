@@ -10,11 +10,15 @@ import uuid
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
 from django.views import generic
-from .models import Event
+from .models import Event, TicketsOrder
 from django.shortcuts import get_object_or_404
 import qrcode
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+import json
 
 
 ######################################################################## Login Views
@@ -219,7 +223,25 @@ class EventTicketsView(generic.DetailView):
     model = Event
     template_name = 'customer/customer_eventTickets.html'
 
-
+@csrf_exempt
+@login_required
+def create_order(request):
+    if request.method == 'POST':
+        try:
+            # Assuming Customer model has a 'user' field representing the linked User instance
+            data = json.loads(request.body)
+            price = float(data.get('total_price'))
+            order = TicketsOrder.objects.create(
+                customer_id=request.user,
+                order_date=timezone.now(),
+                payment_situation=1,
+                total_price=price,
+            )
+            return JsonResponse({'success': True, 'order_id': order.id})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
 ######################################################################## Organizer Views
 def is_organizer(user):
     return user.groups.filter(name='Organizers').exists()

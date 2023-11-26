@@ -11,19 +11,48 @@
 <script>
 let but;
 let modal;
+let CN;
+let ED;
+let CVV;
+let totalPrice = 0;
+let priceTag;
+let modal2;
+let quantities;
+
 document.addEventListener("DOMContentLoaded", function() {
+    quantities = document.querySelectorAll('[data-quantity]');
     but = document.getElementById('button');
     modal = document.getElementById('modal');
+    modal2 = document.getElementById('modal2');
     window.onclick = function (event) {
-        if (event.target == modal) {
+        if (event.target == modal || event.target== modal2) {
                         
             modal.style.display = 'none';
+            modal2.style.display = 'none';
+            totalPrice = 0;
         }
     };
+    CN = document.getElementById('cardNumber');
+    CN.addEventListener('input', function (event) {
+        var input = event.target;
+        var value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+        var formattedValue = formatCardNumber(value);
+        input.value = formattedValue;
+    });
+    ED = document.getElementById('expiryDate');
+    ED.addEventListener('input', function (event) {
+        var input = event.target;
+        var value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+        var formattedValue = formatExpiryDate(value);
+        input.value = formattedValue;
+    });
+
+    CVV =document.getElementById('validationCode');
+    priceTag =document.getElementById('totalPrice');
 });
 
     function checkQuantities() {
-        var quantities = document.querySelectorAll('[data-quantity]');
+        
         var anyNonZero = false;
 
         quantities.forEach(function (quantityElement) {
@@ -40,19 +69,24 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function incrementQuantity(ticketIndex) {
+    function incrementQuantity(ticketIndex, price) {
+     
         var quantityElement = document.getElementById('quantity' + ticketIndex);
         var currentQuantity = parseInt(quantityElement.innerText);
         var newQuantity = currentQuantity + 1;
         quantityElement.innerText = newQuantity;
+        totalPrice = totalPrice + parseFloat(price);
+        console.log(totalPrice)
         checkQuantities();
     }
 
-    function decrementQuantity(ticketIndex) {
+    function decrementQuantity(ticketIndex, price) {
         var quantityElement = document.getElementById('quantity' + ticketIndex);
         var currentQuantity = parseInt(quantityElement.innerText);
         if (currentQuantity >= 1) {
             var newQuantity = currentQuantity - 1;
+            totalPrice = totalPrice - parseFloat(price);
+            console.log(totalPrice);
         } else {
             var newQuantity = currentQuantity;
         }
@@ -63,7 +97,71 @@ document.addEventListener("DOMContentLoaded", function() {
     function openPayment(){
         if(but.className == "buy"){
             modal.style.display = "flex"
+            priceTag.innerHTML = "Valor total: R$ "+ totalPrice.toFixed(2)
+            CN.value='';
+            ED.value='';
+            CVV.value='';
         }
+    }
+
+
+    function formatCardNumber(value) {
+        var formatted = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+        return formatted;
+    }
+
+    function formatExpiryDate(value) {
+        var formatted = value.replace(/\s/g, '').replace(/(\d{2})(\d{2})/, '$1/$2').trim();
+        return formatted;
+    }
+    function getCookie(name) {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name + '='))
+        .split('=')[1];
+    return cookieValue ? decodeURIComponent(cookieValue) : null;
+}   
+
+    function pay(){
+        if (CN.value && ED.value && CVV.value) {
+            console.log('Total Price:', totalPrice);
+            fetch('/customer/create_order/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),  // You need a function to get the CSRF token from cookies
+            },
+            body: JSON.stringify({ total_price: totalPrice.toFixed(2) }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Order created successfully, you can handle the response here (e.g., show a success message)
+                console.log('Order created with ID:', data.order_id);
+                modal.style.display = 'none';
+                modal2.style.display = 'flex';
+                quantities.forEach(function (quantityElement) {
+                    quantityElement.innerHTML = 0;
+                });
+                but.className = 'inactive';
+            } else {
+                // Handle the case where order creation failed
+                console.error('Failed to create order:', data.error);
+            }
+
+        })
+        .catch(error => {
+            console.error('Error creating order:', error);
+        });
+        } else {
+            alert('All input formats are not valid!')
+        }
+    }
+
+    function closemodal(){
+        modal2.style.display = "none";
+        console.log("fechar");
+        totalPrice = 0;
     }
 
 </script>
@@ -92,14 +190,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     <img class="thumb" src="{{ticket.event_id.thumb_image.url}}"/>
                     <div>
                     <h2 style="font-size: 2rem;">{{ ticket.name }}</h2>
-                    <h3  class="categName" style="font-weight: 500; font-size: 1.5rem;">R$ {{ ticket.price }}</h2>
+                    <h3  id="price{{ forloop.counter }}" class="categName" style="font-weight: 500; font-size: 1.5rem;">R$ {{ ticket.price }}</h2>
                     
                     </div>
-                    <a class="qntBut" onclick="decrementQuantity('{{ forloop.counter }}')">
+                    <a class="qntBut" onclick="decrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')">
                         <h2 style="font-size: 4rem;">-</h2>
                     </a>
                     <h2 style="font-size: 3rem;" id="quantity{{ forloop.counter }}" data-quantity="{{ ticket.quantity }}">0 </h2>
-                    <a class="qntBut" onclick="incrementQuantity('{{ forloop.counter }}')" >
+                    <a class="qntBut" onclick="incrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')" >
                         <h2 style="font-size: 4rem;">+ </h2>
                     </a>
                 </div>
@@ -120,6 +218,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <div id="modal">
     <div id="modalContent">
+        <p id="totalPrice" style="font-size: 2rem;">Valor total: </p>
+        <input type="text" id="cardNumber" name="cardNumber" placeholder="Número do cartão" />
+        <input type="text" id="expiryDate" name="expiryDate" placeholder="Data de expiração (MM/YY)" />
+        <input type="text" id="validationCode" name="validationCode" placeholder="CVV" />
+        <button id="buttonPay" class="pay" onclick="pay()">PAGAR</button>
+    </div>
+</div>
+
+<div id="modal2">
+    <div id="modalContent2">
+        <p style="text-align: center;">COMPRA CONCLUÍDA COM SUCESSO!</p>
+        <button id="close" class="pay" onclick="closemodal()">OK</button>
     </div>
 </div>
 
