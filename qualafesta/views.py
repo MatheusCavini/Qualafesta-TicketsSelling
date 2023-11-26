@@ -10,7 +10,7 @@ import uuid
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
 from django.views import generic
-from .models import Event, TicketsOrder
+from .models import Event, TicketsOrder, TicketCattegory
 from django.shortcuts import get_object_or_404
 import qrcode
 from django.http import HttpResponse
@@ -19,6 +19,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import json
+import random
+import string
 
 
 ######################################################################## Login Views
@@ -242,6 +244,44 @@ def create_order(request):
             return JsonResponse({'success': False, 'error': str(e)})
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+@csrf_exempt  # Only for demonstration, consider using a better approach for CSRF protection
+def create_purchased_tickets(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        # Assuming you have the order_id available (modify as needed)
+        order_id = data.get('order_id')
+        order = get_object_or_404(TicketsOrder, id=order_id)
+
+        # Iterate through the selected tickets and create PurchasedTicket instances
+        for ticket_data in data.get('selected_tickets', []):
+            ticket_category_id = ticket_data.get('ticket_category_id')
+            quantity = ticket_data.get('quantity')
+
+            # Assuming you have a model for TicketCattegory
+            ticket_category = get_object_or_404(TicketCattegory, id=ticket_category_id)
+
+            # Create PurchasedTicket instances
+            for _ in range(quantity):
+                section1 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+                section2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+                section3 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+
+                # Combine the sections with hyphens
+                code = f"{section1}-{section2}-{section3}"
+                PurchasedTicket.objects.create(
+                    ticket_order_id=order,
+                    ticket_category_id=ticket_category,
+                    hash_code = code,
+                )
+
+        return JsonResponse({'success': True, 'message': 'Purchased tickets created successfully'})
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+
 ######################################################################## Organizer Views
 def is_organizer(user):
     return user.groups.filter(name='Organizers').exists()

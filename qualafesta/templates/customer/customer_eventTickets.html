@@ -122,42 +122,75 @@ document.addEventListener("DOMContentLoaded", function() {
     return cookieValue ? decodeURIComponent(cookieValue) : null;
 }   
 
-    function pay(){
-        if (CN.value && ED.value && CVV.value) {
-            console.log('Total Price:', totalPrice);
-            fetch('/customer/create_order/', {
+function pay() {
+    if (CN.value && ED.value && CVV.value) {
+        fetch('/customer/create_order/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),  // You need a function to get the CSRF token from cookies
+                'X-CSRFToken': getCookie('csrftoken'),
             },
             body: JSON.stringify({ total_price: totalPrice.toFixed(2) }),
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Order created successfully, you can handle the response here (e.g., show a success message)
-                console.log('Order created with ID:', data.order_id);
-                modal.style.display = 'none';
-                modal2.style.display = 'flex';
-                quantities.forEach(function (quantityElement) {
-                    quantityElement.innerHTML = 0;
+                // Order created successfully, now create purchased tickets
+                const order_id = data.order_id;
+                const selectedTickets = [];
+
+                quantities.forEach(function (quantityElement, index) {
+                    const quantity = parseInt(quantityElement.innerText);
+                    if (quantity > 0) {
+                        const ticket_category_id = index + 1;  // Modify as needed
+                        selectedTickets.push({ ticket_category_id, quantity });
+                    }
+                });
+
+                // Send data to create_purchased_tickets view
+                fetch('/customer/create_purchased_tickets/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        total_price: totalPrice.toFixed(2),
+                        order_id,
+                        selected_tickets: selectedTickets,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Handle success (e.g., show a success message)
+                        console.log('Purchased tickets created successfully');
+                        modal.style.display = 'none';
+                        modal2.style.display = 'flex';
+                        quantities.forEach(function (quantityElement) {
+                        quantityElement.innerHTML = 0;
                 });
                 but.className = 'inactive';
+                    } else {
+                        // Handle the case where purchased ticket creation failed
+                        console.error('Failed to create purchased tickets:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating purchased tickets:', error);
+                });
             } else {
                 // Handle the case where order creation failed
                 console.error('Failed to create order:', data.error);
             }
-
         })
         .catch(error => {
             console.error('Error creating order:', error);
         });
-        } else {
-            alert('All input formats are not valid!')
-        }
+    } else {
+        alert('All input formats are not valid!');
     }
-
+}
     function closemodal(){
         modal2.style.display = "none";
         console.log("fechar");

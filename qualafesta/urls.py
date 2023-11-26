@@ -19,6 +19,7 @@ urlpatterns = [
     path('customer/event/tickets/<int:pk>/', views.EventTicketsView.as_view(), name='ticketsEvent'),
     path('customer/ticketsList/', views.TicketsListViews, name='ticketsList'),
     path('customer/create_order/', views.create_order, name='createOrder'),
+    path('customer/create_purchased_tickets/', views.create_purchased_tickets, name='createTickets'),
     path('qr-code/<str:text>/', views.generate_qr_code, name='generate_qr_code'),
     
 ]
