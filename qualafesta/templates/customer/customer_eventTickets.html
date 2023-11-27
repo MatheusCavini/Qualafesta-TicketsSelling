@@ -226,6 +226,7 @@ function pay() {
                     <h3  id="price{{ forloop.counter }}" class="categName" style="font-weight: 500; font-size: 1.5rem;">R$ {{ ticket.price }}</h2>
                     
                     </div>
+                    {%if ticket.capacity > ticket.sold_amount  %}
                     <a class="qntBut" onclick="decrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')">
                         <h2 style="font-size: 4rem;">-</h2>
                     </a>
@@ -233,6 +234,9 @@ function pay() {
                     <a class="qntBut" onclick="incrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')" >
                         <h2 style="font-size: 4rem;">+ </h2>
                     </a>
+                    {% else %}
+                    <p style="font-size: 2rem; font-weight: 600;">ESGOTADO</p>
+                    {% endif %}
                 </div>
                 </div>
             
