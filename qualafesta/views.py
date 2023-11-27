@@ -181,7 +181,7 @@ def is_customer(user):
 @login_required
 @user_passes_test(is_customer)
 def customer_index(request):
-    return render(request, 'customer/customer_index.html', {})
+    return render(request, 'customer/customer_index.html')
 
 class EventAboutView(generic.DetailView):
     model = Event
@@ -239,3 +239,20 @@ def is_acess_controller(user):
 @user_passes_test(is_acess_controller)
 def acess_controller_index(request):
     return render(request, 'acess_controller/acess_controller_index.html', {})
+
+def list_events(request):
+    event_list = Event.objects.all()
+    context = {'event_list': event_list}
+    return render(request, 'eventes/index.html', context)
+#####################################
+def search_events(request):
+    context = {}
+    if request.GET.get('query', False):
+        search_term = request.GET['query'].lower()
+        event_list = Event.objects.filter(name__icontains=search_term)
+        context = {"event_list": event_list}
+    return render(request, 'customer/search.html',context)
+
+class CustomerIndex(generic.ListView):
+    model = Event
+    template_name = "customer/customer_index.html"
