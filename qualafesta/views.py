@@ -273,29 +273,7 @@ class UpdateEventView(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return (reverse('qualafesta:organizer_events'))  
 
-class AttractionCreateView(View):
-    template_name = 'organizer/create_attraction.html'
-
-    def get(self, request, event_id):
-        event = get_object_or_404(Event, pk=event_id)
-        form = AttractionForm()
-        return render(request, self.template_name, {'event': event, 'form': form, 'event_id': event_id})
-
-    def post(self, request, event_id):
-        event = get_object_or_404(Event, pk=event_id)
-        form = AttractionForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            artist_participation = form.save(commit=False)
-            artist_participation.event_id = event
-            artist_participation.save()
-            return redirect('createAttraction', event_id=event_id)  # Replace 'event-detail' with the actual name of your event detail view
-        else:
-            return render(request, self.template_name, {'event': event, 'form': form, 'event_id': event_id})
-  
 def create_attraction(request, pk):
-    print('\n',request)
-    print(request.POST)
     event = Event.objects.get(id=pk)
     if request.method == 'POST':
         form = AttractionForm(request.POST)
@@ -303,15 +281,14 @@ def create_attraction(request, pk):
         begin_time = request.POST['begin_time']
         end_time = request.POST['end_time']
         artist_image = None
-        #try:
-        artist_image = request.FILES['artist_image']
-        print(artist_image)
-        if artist_image:
-            original_name = artist_image.name
-            unique_name = f"{uuid.uuid4().hex}_{original_name}"
-            artist_image.name = unique_name
-        #except:
-        #    pass
+        try:
+            artist_image = request.FILES['artist_image']
+            if artist_image:
+                original_name = artist_image.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                artist_image.name = unique_name
+        except:
+            pass
         artist_kwargs = {
                 'event_id': event,
                 'artist_name':artist_name,
@@ -328,8 +305,6 @@ def create_attraction(request, pk):
         context = {'form': form, 'event': event}
         return render(request, 'organizer/create_attraction.html', context)
     
-
-
 
 ######################################################################## Acesss Controller Views
 def is_acess_controller(user):

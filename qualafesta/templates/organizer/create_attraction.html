@@ -26,16 +26,15 @@ organizer
 
 
 {% if user.is_authenticated %}
-<p>pagina do usuario</p>
 
-
-<form method="POST" action="{% url 'qualafesta:create_attraction' event.id %}">
+<form method="POST" enctype="multipart/form-data" action="{% url 'qualafesta:create_attraction' event.id %}"
+        style="display: flex; align-items: center; flex-direction: column;">
     <h2>Adicionar nova Atração</h2>
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="add-button">Criar</button>
 </form>
-<p>{{ event.event_id}}</p>
+
 {% else %}
 
 {% endif %}

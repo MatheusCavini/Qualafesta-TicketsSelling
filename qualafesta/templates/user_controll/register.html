@@ -30,7 +30,7 @@
 <form method="post" enctype="multipart/form-data" style="display: flex; align-items: center; flex-direction: column;">
     {% csrf_token %}
     {{ form.as_p }}
-    
+
     <button type="submit">CADASTRAR</button>
     <a href="{% url 'qualafesta:login' %}"> ENTRAR</a>
 </form>
