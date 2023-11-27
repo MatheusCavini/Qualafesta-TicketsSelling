@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -89,5 +90,44 @@ class AcessControllerRegistrationForm(UserCreationForm):
         self.fields['organization'].widget.attrs['placeholder'] = 'Empresa'
         self.fields['password1'].help_text = None
         self.fields['password2'].help_text = None
-        
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = [
+            'name',
+            'location',
+            'date_time',
+            'description',
+            'capacity',
+            'splash_images',
+            'thumb_image',
+            'gender',
+        ]
+        labels = {
+            'name' : 'Nome do Evento',
+            'location' : 'Localização',
+            'date_time' : 'Data',
+            'description' : 'Descrição',
+            'capacity' : 'Capacidade Máxima', 
+            'splash_images' : 'Imagens do Evento',
+            'thumb_image' : 'Imagem de Capa',
+            'gender' : 'Gênero',
+        }
+
+class AttractionForm(ModelForm):
+    class Meta:
+        model = ArtistParticipation
+        fields = [
+            'artist_name',
+            'begin_time',
+            'end_time',
+            'artist_image',
+        ]
+        labels = {
+            'artist_name' : 'Nome do Artista',
+            'begin_time' : 'Hora de Início',
+            'end_time' : 'Hora de Término',
+            'artist_image' : 'Imagem do Artista',
+        }
 

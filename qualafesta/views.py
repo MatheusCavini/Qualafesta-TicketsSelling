@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.models import User, Group
@@ -9,12 +9,13 @@ from django.contrib.auth import login as login_default
 import uuid
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from qualafesta.decorators import group_required
-from django.views import generic
+from django.views import generic, View
 from .models import Event
 from django.shortcuts import get_object_or_404
 import qrcode
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 ######################################################################## Login Views
@@ -226,9 +227,78 @@ def organizer_index(request):
     user_instance = get_object_or_404(Organizer, user_id=request.user.id)
     return render(request, 'organizer/organizer_index.html', {"user_instance":user_instance})
 
-def organizer_events(request):
-    user_instance = get_object_or_404(Organizer, user_id=request.user.id)
-    return render(request, 'organizer/organizer_events.html', {"user_instance":user_instance})
+#def organizer_events(request):
+#   user_instance = get_object_or_404(Organizer, user_id=request.user.id)
+#   return render(request, 'organizer/organizer_events.html', {"user_instance":user_instance})
+class EventCreateView(generic.CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'organizer/create_event.html'
+    #fields = ['name', 'location', 'date_time', 'description', 'capacity', 'splash_images', 'thumb_image', 'gender']
+    # Adicione todos os campos necessários do seu modelo Event
+
+    def form_valid(self, form):
+        # Define o organizador do evento como o usuário logado
+        form.instance.organizer_id = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return (reverse('qualafesta:organizer_events'))  
+    
+class EventListView(LoginRequiredMixin, generic.ListView):
+    model = Event
+    template_name = 'organizer/organizer_events.html'  
+    context_object_name = 'event_list'
+
+    def get_queryset(self):
+        return Event.objects.filter(organizer_id=self.request.user)
+    
+class OrgEventAboutView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/detail_event.html'
+
+class OrgAttractionsView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/organizer_eventAttractions.html'
+
+class UpdateEventView(LoginRequiredMixin, generic.UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'organizer/update_event.html'
+
+    def form_valid(self, form):
+        form.instance.organizer_id = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return (reverse('qualafesta:organizer_events'))  
+    
+class AttractionCreateView(View):
+    template_name = 'organizer/create_attraction.html'
+
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, pk=event_id)
+        form = AttractionForm()
+        return render(request, self.template_name, {'event': event, 'form': form, 'event_id': event_id})
+
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, pk=event_id)
+        form = AttractionForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            artist_participation = form.save(commit=False)
+            artist_participation.event_id = event
+            artist_participation.save()
+            return redirect('createAttraction', event_id=event_id)  # Replace 'event-detail' with the actual name of your event detail view
+        else:
+            return render(request, self.template_name, {'event': event, 'form': form, 'event_id': event_id})
+  
+    
+
+
+
+
+
 
 
 ######################################################################## Acesss Controller Views

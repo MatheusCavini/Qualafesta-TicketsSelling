@@ -1,0 +1,44 @@
+{% extends 'organizerBase.html' %}
+{% load static %}
+
+{% block title %}
+organizer
+{% endblock title %}
+
+{% block style %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+{% endblock style%}
+
+{% block content %}
+<div class="header">
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
+        <img class="profileImage"
+            src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}" />
+        <div class="headerInfo">
+            <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
+            <p class="welcome">Bem-vindo ao App Qualafesta!</p>
+        </div>
+    </div>
+    <a href="/logout"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
+</div>
+<h1>Criar Atração</h1>
+
+
+{% if user.is_authenticated %}
+<p>pagina do usuario</p>
+
+
+<form method="POST" action="{% url 'qualafesta:create_attraction' %}">
+    <h2>Adicionar nova Atração</h2>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="add-button">Criar</button>
+</form>
+<p>{{ event.event_id}}</p>
+{% else %}
+
+{% endif %}
+
+
+{% endblock %}

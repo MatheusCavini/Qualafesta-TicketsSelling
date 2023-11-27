@@ -1,0 +1,51 @@
+{% extends 'organizerBase.html' %}
+{% load static %}
+
+{% block title %}Evento - {{event.name}}{% endblock title%}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div style="display: flex;flex-direction: row; height: 100%;">
+    {% if event.splash_images %}
+    <div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;">
+    </div>
+    {% else %}
+    <div class="splashImageWeb"
+        style="background-image: url(https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZHxlbnwwfHwwfHx8MA%3D%3D); background-size: 40vw;">
+    </div>
+    {% endif %}
+    <div class="splashImage">
+        <div class="aboutContent">
+            <h1 id="eventName">{{event.name}}</h1>
+            <div class="divLine"></div>
+            <div id="tabs">
+                <a href="{% url 'qualafesta:detail_event' event.id %}">
+                    <h3 class="tabName" style="color: #4B02B3;">SOBRE</h3>
+                </a>
+                <a href="{% url 'qualafesta:eventAttractions' event.id %}">
+                    <h3 class="tabName">ATRAÇÕES</h3>
+                </a>
+                <a>
+                    <h3 class="tabName">INGRESSOS</h3>
+                </a>
+            </div>
+            <div style="width: 100%; margin-left: 2.5vw;"><button class="edit-button"><a
+                        href="{% url 'qualafesta:update_event' event.id %}"
+                        style="text-decoration: none;">Editar</a></button></div>
+            <div style="overflow-y: scroll;">
+                <h3 class="sectionName">DESCRIÇÃO</h3>
+                <p class="eventInfo">{{event.description}}</p>
+                <h3 class="sectionName">INFORMAÇÕES</h3>
+                <p class="eventInfo">DATA: {{event.date_time|date:"d/m/Y, H:i"}}</p>
+                <p class="eventInfo">LOCAL: {{event.location}}</p>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

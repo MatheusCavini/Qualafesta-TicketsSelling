@@ -25,17 +25,32 @@ organizer
 </div>
 <h1>Meus Eventos</h1>
 
-
 {% if user.is_authenticated %}
-<p>eventos do organizador</p>
-
-<section id="events-section">
-    <button class="add-button">+ Adicionar</button>
-</section>
+<p>Eventos do organizador</p>
+<div class="events-section">
+    {% if event_list %}
+    {% for event in event_list %}
+    <div class="event-div">
+        <img src="{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"
+            class="event-image" alt="{{event.name}} event Image">
+        <div class="event-content">
+            <h3><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.name}}</a></h3>
+            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.date_time}}</a></p>
+            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.location}}</a></p>
+            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.capacity}}</a></p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>Sem eventos disponíveis</p>
+    {% endif %}
+    <a href="{% url 'qualafesta:create_event' %}" style="margin-top: 2.5vh; margin-bottom: 5vh;"><button
+            class="add-button">+
+            Adicionar</button></a>
+</div>
 
 {% else %}
 <p id='not-auth'>FAÇA O LOGIN PARA TER ACESSO À PÁGINA</p>
 {% endif %}
-
 
 {% endblock %}
