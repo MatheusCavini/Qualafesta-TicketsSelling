@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/organizer', views.register_organizer, name='register_organizer'),
     path('register/customer',  views.register_customer, name='register_customer'),
     path('register/acess_controller',  views.register_acess_controller, name='register_acess_controller'),
-    path('customer/', views.customer_index, name='customer'),
+    path('customer/', views.CustomerIndex.as_view(), name='customer'),
     path('organizer/', views.organizer_index, name='organizer'),
     path('acess_controller/', views.EventControllerViews.as_view(), name='acess_controller'),
     path('acess_controller/search/', views.search_event_controller, name='search_event_controller'),
@@ -28,5 +28,6 @@ urlpatterns = [
     path('customer/create_purchased_tickets/', views.create_purchased_tickets, name='createTickets'),
     path('customer/profile/', views.CustomerProfile, name='customerProfile'),
     path('qr-code/<str:text>/', views.generate_qr_code, name='generate_qr_code'),
+    path('search/', views.search_events, name='search'),
     
 ]
