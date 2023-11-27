@@ -9,7 +9,7 @@
     <div class="aboutContent">
         <h1 id="eventName">Cliente: {{first_name}} {{last_name}}</h1>
     </div>
-    <img style="height: 50vh; width: 50vh; overflow: hidden; border-radius:20px;" src="{% get_media_prefix %}{{ profile_image }}" alt="Imagem de perfil">
+    <img style="height: 50vh; width: 50vh; overflow: hidden; border-radius:20px;" src="{% if profile_image %}{% get_media_prefix %}{{ profile_image }}{% else %} /media/images/profile_default.png{%endif%}"> 
     <a class="controll" href="{% url 'qualafesta:validate_ticket' event_id=event_id ticket_hash=ticket_hash%}">Validar</a>
 </div>
 

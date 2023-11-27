@@ -336,8 +336,9 @@ def is_acess_controller(user):
 @user_passes_test(is_acess_controller)
 @csrf_exempt
 def search_event_controller(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context = {'user_instance':user_instance}
     try:
-        context = {}
         search = request.GET['search_event_controller']
         events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
         if len(events)>0:
@@ -349,15 +350,26 @@ def search_event_controller(request):
             print(context)
             return render(request, 'acess_controller/search_event_controller.html', context)
     except:
-        return render(request, 'acess_controller/search_event_controller.html', {})
+        return render(request, 'acess_controller/search_event_controller.html', context)
       
 class EventControllerViews(generic.ListView):
     model = Event
     template_name = 'acess_controller/acess_controller_index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
 
 class EventControllView(generic.DetailView):
     model = Event
     template_name = 'acess_controller/controll_event.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+
 
 def get_ticket_data(ticket_hash, event_id):
     try:
@@ -395,6 +407,8 @@ def get_ticket_data(ticket_hash, event_id):
 def ticket_detail(request, pk):
     ticket_hash = request.GET['query']
     context = get_ticket_data(ticket_hash, pk)
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context['user_instance'] = user_instance
     return render(request, 'acess_controller/ticket_data.html', context)
 
 @login_required
@@ -433,3 +447,7 @@ def scan_qr(request):
                                  'redirect_url':None,'hash_code':None})
     else:
         return JsonResponse({'error': 'Invalid request method'})
+    
+def acess_controller_profile(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    return render(request, 'acess_controller/acess_controller_profile.html', {'user_instance':user_instance})

@@ -16,7 +16,9 @@
 <body >
     <header>
         <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
-            <img style="width: 6rem; height: 6rem; border-radius: 7rem;" src="{% if acess_controller.profile_image %}{{acess_controller.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
+            <a href="{% url 'qualafesta:acessControllerProfile' %}">
+                <img class="profileImage" src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
+    </a>
             <div class="headerInfo">
                 <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
                 <p class="welcome">Bem-vindo ao App Qualafesta!</p>
@@ -30,8 +32,8 @@
                 <a class="hideWhenMobile" href="{% url 'qualafesta:acess_controller' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
                 <a href="{% url 'qualafesta:acess_controller' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
                 <a href="{% url 'qualafesta:search_event_controller'%}"> <img class="navIcon" src="{% static '/images/searchIcon.svg' %}" alt="Logo"></a>
-                <a><img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>
-                  </div>
+                <a href="{% url 'qualafesta:acessControllerProfile'%}"><img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>
+            </div>
         </div>
         <div class="content">
             {% block content %}
