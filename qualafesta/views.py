@@ -211,7 +211,7 @@ def is_customer(user):
 @login_required
 @user_passes_test(is_customer)
 def customer_index(request):
-    return render(request, 'customer/customer_index.html')
+    return render(request, 'customer/customer_index.html', {})
 
 class EventAboutView(generic.DetailView):
     model = Event
@@ -334,8 +334,123 @@ def is_acess_controller(user):
 
 @login_required
 @user_passes_test(is_acess_controller)
-def acess_controller_index(request):
-    return render(request, 'acess_controller/acess_controller_index.html', {})
+@csrf_exempt
+def search_event_controller(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context = {'user_instance':user_instance}
+    try:
+        search = request.GET['search_event_controller']
+        events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if len(events)>0:
+            context['event_list'] = events
+            context['search_message'] = f'Resultados para a busca de "{search}"'
+            return render(request, 'acess_controller/acess_controller_index.html', context)
+        else:
+            context['error_message'] = f'Nenhum evento encontrado para a busca "{search}"'
+            print(context)
+            return render(request, 'acess_controller/search_event_controller.html', context)
+    except:
+        return render(request, 'acess_controller/search_event_controller.html', context)
+      
+class EventControllerViews(generic.ListView):
+    model = Event
+    template_name = 'acess_controller/acess_controller_index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+
+class EventControllView(generic.DetailView):
+    model = Event
+    template_name = 'acess_controller/controll_event.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+
+
+def get_ticket_data(ticket_hash, event_id):
+    try:
+        purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+        ticket_order = purchased_ticket.ticket_order_id
+        user = ticket_order.customer_id 
+        customer = Customer.objects.get(user_id=user.id)
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'profile_image': customer.profile_image,
+            'user':user,
+            'correct':True,
+        }
+        if purchased_ticket.status:
+            context['correct'] = False
+            context['error_message'] ='Este ingresso já foi validado'
+        elif ticket_order.payment_situation != 0:
+            context['correct'] = False
+            context['error_message'] ='O pagamento deste ingresso não foi efetuado'
+    except:
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'correct':False,
+            'error_message':'Ingresso não encontrado'
+        }
+    return context
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def ticket_detail(request, pk):
+    ticket_hash = request.GET['query']
+    context = get_ticket_data(ticket_hash, pk)
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context['user_instance'] = user_instance
+    return render(request, 'acess_controller/ticket_data.html', context)
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def validate_ticket(request, event_id, ticket_hash):
+    purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+    controller_user = request.user
+    purchased_ticket.acess_controller_id = controller_user
+    purchased_ticket.status = True
+    purchased_ticket.entrance = datetime.now()
+    purchased_ticket.save()
+    return redirect(f'/acess_controller/controll_event{str(event_id)}')
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def scan_qr(request):
+    if request.method == 'POST':
+        received_data = json.loads(request.body)
+        event_id = received_data.get('event_id')
+        image_data = received_data.get('image')
+        image_data = base64.b64decode(image_data.split(',')[1])
+        nparr = np.frombuffer(image_data, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        decoded_objects = decode(gray_img)
+        if decoded_objects:
+            qr_data = decoded_objects[0].data.decode('utf-8')
+            redirect_url = f'ticket_detail?query={qr_data}'
+            return JsonResponse({'message': 'QR code decodificado com sucesso', 
+                                 'redirect_url': redirect_url,
+                                 'hash_code': qr_data})
+        else:
+            return JsonResponse({'message': 'Nenhum QR code encontrado', 
+                                 'redirect_url':None,'hash_code':None})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+    
+def acess_controller_profile(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    return render(request, 'acess_controller/acess_controller_profile.html', {'user_instance':user_instance})
 
 def list_events(request):
     event_list = Event.objects.all()
@@ -350,6 +465,6 @@ def search_events(request):
         context = {"event_list": event_list}
     return render(request, 'customer/search.html',context)
 
-class CustomerIndex(generic.ListView):
-    model = Event
-    template_name = "customer/customer_index.html"
+def CustomerIndex(request):
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    return render(request, 'customer/customer_index.html', {'user_instance':user_instance})
