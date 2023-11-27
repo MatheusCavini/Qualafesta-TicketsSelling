@@ -115,19 +115,24 @@ class EventForm(ModelForm):
             'gender' : 'Gênero',
         }
 
+from datetime import datetime
 class AttractionForm(ModelForm):
+    artist_name = forms.CharField(max_length=255, required=True)
+    begin_time = forms.DateTimeField(required=True, initial=datetime.now())
+    end_time = forms.DateTimeField(required=True, initial=datetime.now())
+    artist_image = forms.ImageField(required=False)
+
     class Meta:
         model = ArtistParticipation
-        fields = [
+        fields = fields = [
             'artist_name',
             'begin_time',
             'end_time',
             'artist_image',
         ]
-        labels = {
-            'artist_name' : 'Nome do Artista',
-            'begin_time' : 'Hora de Início',
-            'end_time' : 'Hora de Término',
-            'artist_image' : 'Imagem do Artista',
-        }
-
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['artist_name'].widget.attrs['placeholder'] = 'Nome'
+        self.fields['begin_time'].widget.attrs['placeholder'] = 'Hora de Início'
+        self.fields['end_time'].widget.attrs['placeholder'] = 'Hora de Fim'
+        self.fields['artist_image'].widget.attrs['placeholder'] = 'Imagem do artista'

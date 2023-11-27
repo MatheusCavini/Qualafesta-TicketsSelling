@@ -11,13 +11,22 @@ urlpatterns = [
     path('register/customer',  views.register_customer, name='register_customer'),
     path('register/acess_controller',  views.register_acess_controller, name='register_acess_controller'),
     path('customer/', views.customer_index, name='customer'),
+
     path('organizer/', views.organizer_index, name='organizer'),
     path('organizer/events', views.EventListView.as_view(), name='organizer_events'),
     path('organizer/createEvent', views.EventCreateView.as_view(), name='create_event'),
     path('organizer/event/about/<int:pk>/', views.OrgEventAboutView.as_view(), name='detail_event'),
-    path('organizer/event/attractions/<int:pk>/', views.OrgAttractionsView.as_view(), name='eventAttractions'),
+
+    path('organizer/event/about/<int:pk>/attractions/', views.OrgAttractionsView.as_view(), name='event_attractions'),
+    path('organizer/event/about/<int:pk>/createAttraction/', views.create_attraction, name = 'create_attraction'),
+
+
+
     path('organizer/event/updateEvent/<int:pk>/', views.UpdateEventView.as_view(), name='update_event'),
-    path('organizer/event/createAttraction/<int:pk/', views.AttractionCreateView.as_view(), name = 'create_attraction'),
+
+    
+
+
     path('acess_controller/', views.acess_controller_index, name='acess_controller'),
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),

@@ -29,7 +29,7 @@ organizer
 <p>pagina do usuario</p>
 
 
-<form method="POST" action="{% url 'qualafesta:create_attraction' %}">
+<form method="POST" action="{% url 'qualafesta:create_attraction' event.id %}">
     <h2>Adicionar nova Atração</h2>
     {% csrf_token %}
     {{ form.as_p }}

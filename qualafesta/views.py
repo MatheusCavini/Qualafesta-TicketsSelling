@@ -272,7 +272,7 @@ class UpdateEventView(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return (reverse('qualafesta:organizer_events'))  
-    
+
 class AttractionCreateView(View):
     template_name = 'organizer/create_attraction.html'
 
@@ -293,11 +293,41 @@ class AttractionCreateView(View):
         else:
             return render(request, self.template_name, {'event': event, 'form': form, 'event_id': event_id})
   
+def create_attraction(request, pk):
+    print('\n',request)
+    print(request.POST)
+    event = Event.objects.get(id=pk)
+    if request.method == 'POST':
+        form = AttractionForm(request.POST)
+        artist_name = request.POST['artist_name']
+        begin_time = request.POST['begin_time']
+        end_time = request.POST['end_time']
+        artist_image = None
+        #try:
+        artist_image = request.FILES['artist_image']
+        print(artist_image)
+        if artist_image:
+            original_name = artist_image.name
+            unique_name = f"{uuid.uuid4().hex}_{original_name}"
+            artist_image.name = unique_name
+        #except:
+        #    pass
+        artist_kwargs = {
+                'event_id': event,
+                'artist_name':artist_name,
+                'begin_time':begin_time,
+                'end_time':end_time,
+                'artist_image':artist_image
+            }
+        artist = ArtistParticipation.objects.create(**artist_kwargs)
+        artist.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:event_attractions', args=(event.id, )))
+    else:
+        form = AttractionForm()
+        context = {'form': form, 'event': event}
+        return render(request, 'organizer/create_attraction.html', context)
     
-
-
-
-
 
 
 
