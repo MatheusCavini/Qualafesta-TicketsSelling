@@ -16,10 +16,14 @@ urlpatterns = [
     path('organizer/events', views.EventListView.as_view(), name='organizer_events'),
     path('organizer/createEvent', views.EventCreateView.as_view(), name='create_event'),
     path('organizer/event/about/<int:pk>/', views.OrgEventAboutView.as_view(), name='detail_event'),
+    
 
     path('organizer/event/about/<int:pk>/attractions/', views.OrgAttractionsView.as_view(), name='event_attractions'),
     path('organizer/event/about/<int:pk>/createAttraction/', views.create_attraction, name = 'create_attraction'),
+    #path('organizer/event/about/<int:pk>/updateAttraction/<int:attraction_id>/', views.update_attraction, name = 'update_attraction'),
 
+    path('organizer/event/about/tickets/<int:pk>/', views.OrgTicketsView.as_view(), name='event_tickets'),
+    path('organizer/event/about/<int:pk>/createTicket/', views.create_ticket, name = 'create_ticket'),
 
 
     path('organizer/event/updateEvent/<int:pk>/', views.UpdateEventView.as_view(), name='update_event'),

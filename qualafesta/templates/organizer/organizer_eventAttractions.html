@@ -31,7 +31,7 @@
                 <a href="{% url 'qualafesta:event_attractions' event.id%}">
                     <h3 class="tabName " style="color: #4B02B3;">ATRAÇÕES</h3>
                 </a>
-                <a>
+                <a href="{% url 'qualafesta:event_tickets' event.id%}">
                     <h3 class="tabName">INGRESSOS</h3>
                 </a>
             </div>
@@ -48,6 +48,9 @@
                         </h3>
 
                     </div>
+                    <a>
+                        <p>Editar</p>
+                    </a>
                 </div>
 
                 {% endfor %}

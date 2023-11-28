@@ -136,3 +136,27 @@ class AttractionForm(ModelForm):
         self.fields['begin_time'].widget.attrs['placeholder'] = 'Hora de Início'
         self.fields['end_time'].widget.attrs['placeholder'] = 'Hora de Fim'
         self.fields['artist_image'].widget.attrs['placeholder'] = 'Imagem do artista'
+
+class TicketForm(ModelForm):
+    name = forms.CharField(max_length=255, required=True)
+    description = forms.CharField(max_length=255, required=True)
+    capacity = forms.IntegerField(required=True)
+    price = forms.IntegerField(required=True)
+    sold_amount = forms.IntegerField(required=True)
+
+    class Meta:
+        model = ArtistParticipation
+        fields = fields = [
+            'name',
+            'description',
+            'capacity',
+            'price',
+            'sold_amount',
+        ]
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Nome'
+        self.fields['description'].widget.attrs['placeholder'] = 'Descrição'
+        self.fields['capacity'].widget.attrs['placeholder'] = 'Capacidade'
+        self.fields['price'].widget.attrs['placeholder'] = 'Preço'
+        self.fields['sold_amount'].widget.attrs['placeholder'] = 'Quantidade Vendida'

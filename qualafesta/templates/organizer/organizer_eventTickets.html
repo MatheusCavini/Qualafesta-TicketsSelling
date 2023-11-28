@@ -1,0 +1,106 @@
+{% extends 'organizerBase.html' %}
+{% load static %}
+
+{% block title %}Evento - Ingressos {{event.name}}{% endblock title%}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'organizerCSS/event_detail.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'organizerCSS/events_multiple.css' %}">
+{% endblock style %}
+
+{% if event.splash_images %}
+<div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;">
+</div>
+{% else %}
+<div class="splashImageWeb"
+    style="background-image: url(https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZHxlbnwwfHwwfHx8MA%3D%3D); background-size: 40vw;">
+</div>
+{% endif %}
+
+{% block content %}
+<div style="display: flex;flex-direction: row; height: 100%;">
+    {% if event.splash_images %}
+    <div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;">
+        <div class="splashImage" style="background-image: url({{event.splash_images.url}}); background-size: 100vw;">
+        </div>
+    </div>
+    {% else %}
+    <div class="splashImageWeb"
+        style="background-image: url(https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZHxlbnwwfHwwfHx8MA%3D%3D); background-size: 40vw;">
+    </div>
+    <div class="splashImage"
+        style="background-image: url(https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZHxlbnwwfHwwfHx8MA%3D%3D); background-size: 40vw;">
+    </div>
+    {% endif %}
+    <div class="aboutContent">
+        <h1 id="eventName">{{event.name}}</h1>
+        <div class="divLine"></div>
+        <div id="tabs">
+            <a href="{% url 'qualafesta:detail_event' event.id%}">
+                <h3 class="tabName">SOBRE</h3>
+            </a>
+            <a href="{% url 'qualafesta:event_attractions' event.id%}">
+                <h3 class="tabName ">ATRAÇÕES</h3>
+            </a>
+            <a href="{% url 'qualafesta:event_tickets' event.id%}">
+                <h3 class="tabName" style="color: #4B02B3;">INGRESSOS</h3>
+            </a>
+        </div>
+        {% if event.ticketcattegory_set.all %}
+        <div
+            style=" width: 100%; height: 80vh; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y: scroll;">
+            {% for ticket in event.ticketcattegory_set.all %}
+            <div class="paymentColor " style="background-color: #4B02B3;">
+                <div class="ticketCard">
+
+                    <img class="thumb" src="{{ticket.event_id.thumb_image.url}}" />
+                    <div>
+                        <h2 style="font-size: 2rem;">{{ ticket.name }}</h2>
+
+                        <h3 class="categName" style="font-weight: 500; font-size: 1.5rem;">R$ {{ ticket.price }}
+                        </h3>
+
+                    </div>
+                    <a class="qntBut">
+                        <h2 style="font-size: 4rem;"> </h2>
+                    </a>
+                    <h2 style="font-size: 3rem;"> </h2>
+                    <a class="qntBut">
+                        <h2 style="font-size: 1.2rem;"> {{ticket.sold_amount}} de {{ ticket.capacity }} Vendidos </h2>
+                    </a>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+        {% else %}
+        <div
+            style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <p style="font-size: 2rem; font-weight: 500; text-align: center;"> AINDA NÃO HA INGRESSOS DISPONÍVEIS
+                PARA COMPRA NESSE EVENTO.</p>
+        </div>
+        {%endif%}
+        <a style="margin-top: 2.5vh; margin-bottom: 5vh;" href="{% url 'qualafesta:create_ticket' event.id %}">
+            <button style="    display: flex;
+            width: 120px;
+            height: 36px;
+            padding: 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            background: var(--E, #4B02B3);
+            color: white;">+
+                Adicionar</button></a>
+    </div>
+</div>
+</div>
+<div id="modal">
+    <div id="modalContent">
+    </div>
+</div>
+
+
+{% endblock content %}

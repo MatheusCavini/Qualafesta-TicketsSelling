@@ -303,8 +303,38 @@ def create_attraction(request, pk):
     else:
         form = AttractionForm()
         context = {'form': form, 'event': event}
-        return render(request, 'organizer/create_attraction.html', context)
+        return render(request, 'organizer/create_attraction.html', context)    
     
+class OrgTicketsView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/organizer_eventTickets.html'
+
+def create_ticket(request, pk):
+    event = Event.objects.get(id=pk)
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        name = request.POST['name']
+        description= request.POST['description']
+        capacity = request.POST['capacity']
+        price = request.POST['price']
+        sold_amount = request.POST['sold_amount']
+        ticket_kwargs = {
+                'event_id': event,
+                'name':name,
+                'description':description,
+                'capacity':capacity,
+                'price':price,
+                'sold_amount':sold_amount
+            }
+        ticket = TicketCattegory.objects.create(**ticket_kwargs)
+        ticket.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:event_tickets', args=(event.id, )))
+    else:
+        form = TicketForm()
+        context = {'form': form, 'event': event}
+        return render(request, 'organizer/create_ticket.html', context)   
+
 
 ######################################################################## Acesss Controller Views
 def is_acess_controller(user):
