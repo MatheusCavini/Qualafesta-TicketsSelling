@@ -389,7 +389,7 @@ def get_ticket_data(ticket_hash, event_id):
         if purchased_ticket.status:
             context['correct'] = False
             context['error_message'] ='Este ingresso já foi validado'
-        elif ticket_order.payment_situation != 0:
+        elif ticket_order.payment_situation != 1:
             context['correct'] = False
             context['error_message'] ='O pagamento deste ingresso não foi efetuado'
     except:
