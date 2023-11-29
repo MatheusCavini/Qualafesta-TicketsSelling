@@ -466,5 +466,6 @@ def search_events(request):
     return render(request, 'customer/search.html',context)
 
 def CustomerIndex(request):
+    event_list = Event.objects.all()
     user_instance = get_object_or_404(Customer, user_id=request.user.id)
-    return render(request, 'customer/customer_index.html', {'user_instance':user_instance})
+    return render(request, 'customer/customer_index.html', {'user_instance':user_instance, "event_list": event_list})
