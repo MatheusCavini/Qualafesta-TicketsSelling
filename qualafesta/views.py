@@ -163,7 +163,7 @@ def register_organizer(request):
             organizer = Organizer.objects.create(**organizer_kwargs)
             organizer.save()
             return HttpResponseRedirect(
-                reverse('qualafesta:organizer'))
+                reverse('qualafesta:organizer_events'))
     else:
         form = OrganizerRegistrationForm()
     context = {'form': form, 'type_user':'organizer'}
