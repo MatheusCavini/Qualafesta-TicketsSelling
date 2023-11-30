@@ -142,7 +142,7 @@ function pay() {
                 quantities.forEach(function (quantityElement, index) {
                     const quantity = parseInt(quantityElement.innerText);
                     if (quantity > 0) {
-                        const ticket_category_id = index + 1;  // Modify as needed
+                        const ticket_category_id = parseInt(quantityElement.className);  // Modify as needed
                         selectedTickets.push({ ticket_category_id, quantity });
                     }
                 });
@@ -230,7 +230,7 @@ function pay() {
                     <a class="qntBut" onclick="decrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')">
                         <h2 style="font-size: 4rem;">-</h2>
                     </a>
-                    <h2 style="font-size: 3rem;" id="quantity{{ forloop.counter }}" data-quantity="{{ ticket.quantity }}">0 </h2>
+                    <h2  style="font-size: 3rem;" id="quantity{{ forloop.counter }}" data-quantity="{{ ticket.quantity }}" class="{{ ticket.id }}">0 </h2>
                     <a class="qntBut" onclick="incrementQuantity('{{ forloop.counter }}', '{{ ticket.price }}')" >
                         <h2 style="font-size: 4rem;">+ </h2>
                     </a>
