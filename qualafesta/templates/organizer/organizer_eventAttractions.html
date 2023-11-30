@@ -1,0 +1,80 @@
+{% extends 'organizerBase.html' %}
+{% load static %}
+
+{% block title %}Evento - {{event.name}}{% endblock title%}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'organizer/event_detail.css' %}">
+{% endblock style %}
+
+
+
+{% block content %}
+<div style="display: flex;flex-direction: row; height: 100%;">
+    {% if event.splash_images %}
+    <div class="splashImageWeb" style="background-image: url({{event.splash_images.url}}); background-size: 40vw;">
+    </div>
+    {% else %}
+    <div class="splashImageWeb"
+        style="background-image: url(https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFuZHxlbnwwfHwwfHx8MA%3D%3D); background-size: 40vw;">
+    </div>
+    {% endif %}
+    <div class="splashImage">
+        <div class="aboutContent">
+            <h1 id="eventName">{{event.name}}</h1>
+            <div class="divLine"></div>
+            <div id="tabs">
+                <a href="{% url 'qualafesta:detail_event' event.id%}">
+                    <h3 class="tabName">SOBRE</h3>
+                </a>
+                <a href="{% url 'qualafesta:event_attractions' event.id%}">
+                    <h3 class="tabName " style="color: #4B02B3;">ATRAÇÕES</h3>
+                </a>
+                <a href="{% url 'qualafesta:event_tickets' event.id%}">
+                    <h3 class="tabName">INGRESSOS</h3>
+                </a>
+            </div>
+            {% if event.artistparticipation_set.all %}
+            <div
+                style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y: scroll;">
+                {% for artist in event.artistparticipation_set.all %}
+                <div class="artistCard">
+                    <img width="9rem" height="10.5rem" class="artistImage"
+                        src="{% if artist.artist_image %}{{artist.artist_image.url}}{% else %} /media/images/profile_default.png{%endif%}" />
+                    <div class="artistInfo">
+                        <h2 style="font-size: 2.5rem;">{{artist.artist_name}}</h2>
+                        <h3 style="font-size: 1.7rem;">{{artist.begin_time|date:"H:i"}} - {{artist.end_time|date:"H:i"}}
+                        </h3>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+            {% else %}
+            <div
+                style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <p style="font-size: 2rem; font-weight: 500; text-align: center;"> AS ATRAÇÕES AINDA NÃO FORAM
+                    DIVULGADAS.</p>
+            </div>
+            {%endif%}
+            <a style="margin-top: 2.5vh; margin-bottom: 5vh;" href="{% url 'qualafesta:create_attraction' event.id %}">
+                <button style="    display: flex;
+                width: 120px;
+                height: 36px;
+                padding: 8px;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+                border-radius: 8px;
+                background: var(--E, #4B02B3);
+                color: white;">+
+                    Adicionar</button></a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

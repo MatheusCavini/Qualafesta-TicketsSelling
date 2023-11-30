@@ -1,58 +1,15 @@
 
-body{
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fafafa;
-}
 
-
-header{
-    display: flex;
-    width: 100vw;
-    padding: 1.5rem;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    box-sizing: border-box;    
-}
-
-.headerInfo{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.userName{
-    color: #1E2732; 
-    font-size: 1.8rem;
-    font-style: normal;
-    font-weight: 600;
-    font-feature-settings: 'clig' off, 'liga' off;
-}
-
-.welcome{
-    color: #1E2732;
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 500;
-    margin: 1rem 0;
-}
-
-.profileImage{
-    width: 6rem;
-    height: 6rem;
-    border-radius: 7rem;
-}
 .eventsSpot{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    gap: 6vh;
+    gap: 1vh;
     height: 100%;
+    width: 100%;
     margin-bottom: 12vh;
+    margin-left: 10vw;
 }
 
 .userProfileImage{
@@ -68,6 +25,7 @@ header{
     width: 30vw;
     height: 6vh;
     padding-left: 1vw;
+    font-size: 2rem;
 }
 
 button.search{
@@ -96,50 +54,7 @@ form.formHash{
 }
 
 
-.navbarRegion{
-    width: 15vw;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    left: 0;    
-    z-index: 1000;
-}
 
-.content{
-    height: 100%;
-    z-index: 0;
-}
-
-.navbar{
-    display: flex;
-    width: 7.5rem;
-    height: 32rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding-top: 32px;
-    flex-shrink: 0;
-    border-radius: 1rem;
-    background: var(--Surface, #FFF);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-
-.logo{
-    width: 4.75rem;
-    height: 4.4375rem;
-    flex-shrink: 0;
-}
-
-.navIcon{
-    width: 4rem;
-}
-
-#navIconCal{
-    width: 5.8rem;
-}
 
 
 .controllContent{
@@ -212,36 +127,43 @@ a.controll{
         background: var(--Surface, #FFF);
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     }
-
-    .navbarRegion{
-        width: 100vw;
-        height: 10vh;
-        position: fixed;
-        bottom: 0;
-        z-index: 1000;
+    .input_cattegory{
+        border: blueviolet solid;
+        border-radius: 2vh;
+        width: 80vw;
+        height: 6vh;
+        padding-left: 1vw;
+    }
+    button.search{
+        margin: 2vh;
+        width: 30vw;
+        height: 6vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: blueviolet solid;
+        color: #FFF;
+        background-color: blueviolet;
+        border-radius: 1vh;
+        font-weight: 600;
+        font-size: medium;    
+        text-decoration: none;
+        cursor: pointer;
     }
 
-    .navbar{
+    .eventsSpot{
         display: flex;
-        width: 100vw;
-        height: 10vh;
-        flex-direction:row;
-        padding: 0;
+        flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        flex-shrink: 0;
-        border-radius: 0rem;
-        background: #FFF;
+        gap: 1vh;
+        height: 100%;
+        width: 100%;
+        margin-bottom: 12vh;
+        margin-left: 0;
     }
 
-    .logo{
-        display: none;
-        flex: 0;
-    }
 
-    .hideWhenMobile{
-        display: none;
-        flex: 0;
     
-    }
 }

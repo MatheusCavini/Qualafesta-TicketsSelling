@@ -11,6 +11,7 @@ urlpatterns = [
     path('register/customer',  views.register_customer, name='register_customer'),
     path('register/acess_controller',  views.register_acess_controller, name='register_acess_controller'),
     path('customer/', views.CustomerIndex, name='customer'),
+
     path('organizer/', views.organizer_index, name='organizer'),
     path('acess_controller/', views.EventControllerViews.as_view(), name='acess_controller'),
     path('acess_controller/search/', views.search_event_controller, name='search_event_controller'),
@@ -19,7 +20,23 @@ urlpatterns = [
     path('acess_controller/controll_event<int:event_id>/validate/<str:ticket_hash>', views.validate_ticket, name='validate_ticket'),
     path('acess_controller/profile/', views.acess_controller_profile, name='acessControllerProfile'),
     path('scan/', views.scan_qr, name='scan_qr'),
-    path('organizer/events', views.organizer_events, name='organizer_events'),
+    path('organizer/events', views.EventListView.as_view(), name='organizer_events'),
+    path('organizer/createEvent', views.create_event, name='create_event'),
+    path('organizer/event/about/<int:pk>/', views.OrgEventAboutView.as_view(), name='detail_event'),
+
+    path('organizer/event/about/<int:pk>/attractions/', views.OrgAttractionsView.as_view(), name='event_attractions'),
+    path('organizer/event/about/<int:pk>/createAttraction/', views.create_attraction, name = 'create_attraction'),
+    #path('organizer/event/about/<int:pk>/updateAttraction/<int:attraction_id>/', views.update_attraction, name = 'update_attraction'),
+
+    path('organizer/event/about/tickets/<int:pk>/', views.OrgTicketsView.as_view(), name='event_tickets'),
+    path('organizer/event/about/<int:pk>/createTicket/', views.create_ticket, name = 'create_ticket'),
+
+
+    path('organizer/event/updateEvent/<int:pk>/', views.UpdateEventView.as_view(), name='update_event'),
+
+    
+
+
     path('customer/event/about/<int:pk>/', views.EventAboutView.as_view(), name='aboutEvent'),
     path('customer/event/attractions/<int:pk>/', views.EventAttractionsView.as_view(), name='attractionsEvent'),
     path('customer/event/tickets/<int:pk>/', views.EventTicketsView.as_view(), name='ticketsEvent'),

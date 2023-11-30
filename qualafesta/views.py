@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
-from django.views import generic
+from django.views import generic, View
 from django.test import RequestFactory
 from .models import Event, TicketsOrder, TicketCattegory
 from django.http import JsonResponse
@@ -27,6 +27,7 @@ from django.utils import timezone
 import json
 import random
 import string
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 ######################################################################## Login Views
@@ -330,9 +331,144 @@ def organizer_index(request):
     user_instance = get_object_or_404(Organizer, user_id=request.user.id)
     return render(request, 'organizer/organizer_index.html', {"user_instance":user_instance})
 
-def organizer_events(request):
-    user_instance = get_object_or_404(Organizer, user_id=request.user.id)
-    return render(request, 'organizer/organizer_events.html', {"user_instance":user_instance})
+class EventListView(LoginRequiredMixin, generic.ListView):
+    model = Event
+    template_name = 'organizer/organizer_events.html'  
+    context_object_name = 'event_list'
+
+    def get_queryset(self):
+        return Event.objects.filter(organizer_id=self.request.user)
+    
+class OrgEventAboutView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/detail_event.html'
+
+class OrgAttractionsView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/organizer_eventAttractions.html'
+
+class UpdateEventView(LoginRequiredMixin, generic.UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'organizer/update_event.html'
+
+    def form_valid(self, form):
+        form.instance.organizer_id = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return (reverse('qualafesta:organizer_events'))  
+
+def create_attraction(request, pk):
+    event = Event.objects.get(id=pk)
+    if request.method == 'POST':
+        form = AttractionForm(request.POST)
+        artist_name = request.POST['artist_name']
+        begin_time = request.POST['begin_time']
+        end_time = request.POST['end_time']
+        artist_image = None
+        try:
+            artist_image = request.FILES['artist_image']
+            if artist_image:
+                original_name = artist_image.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                artist_image.name = unique_name
+        except:
+            pass
+        artist_kwargs = {
+                'event_id': event,
+                'artist_name':artist_name,
+                'begin_time':begin_time,
+                'end_time':end_time,
+                'artist_image':artist_image
+            }
+        artist = ArtistParticipation.objects.create(**artist_kwargs)
+        artist.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:event_attractions', args=(event.id, )))
+    else:
+        form = AttractionForm()
+        context = {'form': form, 'event': event}
+        return render(request, 'organizer/create_attraction.html', context)    
+    
+
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        name= request.POST['name']
+        location= request.POST['location']
+        date_time= request.POST['date_time']
+        description= request.POST['description']
+        capacity= request.POST['capacity']
+        gender= request.POST['gender']
+        splash_images= None
+        thumb_image= None
+        organizer_id = request.user
+        try:
+            splash_images = request.FILES['splash_images']
+            if splash_images:
+                original_name = splash_images.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                splash_images.name = unique_name
+        except:
+            pass
+        try:
+            thumb_image = request.FILES['thumb_image']
+            if thumb_image:
+                original_name = thumb_image.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                thumb_image.name = unique_name
+        except:
+            pass
+        event_kwargs={
+            'organizer_id': organizer_id,
+            'name': name,
+            'location': location,
+            'date_time': date_time,
+            'description': description,
+            'capacity': capacity,
+            'gender': gender,
+            'splash_images': splash_images,
+            'thumb_image': thumb_image
+        }
+        event = Event.objects.create(**event_kwargs)
+        event.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:organizer_events'))
+    else:
+        form = EventForm()
+        context = {'form': form}
+        return render(request, 'organizer/create_event.html', context)    
+    
+class OrgTicketsView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = 'organizer/organizer_eventTickets.html'
+
+def create_ticket(request, pk):
+    event = Event.objects.get(id=pk)
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        name = request.POST['name']
+        description= request.POST['description']
+        capacity = request.POST['capacity']
+        price = request.POST['price']
+        sold_amount = request.POST['sold_amount']
+        ticket_kwargs = {
+                'event_id': event,
+                'name':name,
+                'description':description,
+                'capacity':capacity,
+                'price':price,
+                'sold_amount':sold_amount
+            }
+        ticket = TicketCattegory.objects.create(**ticket_kwargs)
+        ticket.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:event_tickets', args=(event.id, )))
+    else:
+        form = TicketForm()
+        context = {'form': form, 'event': event}
+        return render(request, 'organizer/create_ticket.html', context)   
 
 
 ######################################################################## Acesss Controller Views

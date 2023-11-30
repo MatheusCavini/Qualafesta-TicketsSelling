@@ -1,0 +1,34 @@
+form input{
+    display: flex;
+    width: 50rem;
+    height: 2rem;
+    padding: 0.625rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: 1px solid #505261;
+    background: #FFF;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin: 4px;
+    font-size: 1.5rem;
+}
+
+form button{
+    display: flex;
+    width: 11.25rem;
+    height: 3.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    background:  #6B02FF;
+    color: #fff;
+    font-size: 1.5rem;
+    border: 0;
+    margin-top: 32px;
+}
+
+label{
+    font-size: 1.5rem;
+}
