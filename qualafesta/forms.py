@@ -97,8 +97,8 @@ class EventForm(ModelForm):
     date_time = forms.DateTimeField(required=True, initial=datetime.now())
     description = forms.CharField(max_length=255, required=True)
     capacity = forms.IntegerField(required=True)
-    splash_images = forms.ImageField(required=False)
-    thumb_image = forms.ImageField(required=False)
+    splash_images = forms.ImageField(required=True)
+    thumb_image = forms.ImageField(required=True)
     gender = forms.CharField(max_length=255, required=True)
 
     class Meta:
