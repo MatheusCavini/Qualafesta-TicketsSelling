@@ -6,7 +6,6 @@
     gap: 1vh;
     height: 90%;
     width: 100%;
-    margin-left: 10vw;
 }
 
 .userProfileImage{
@@ -75,7 +74,8 @@ form.formHash{
 }
 
 .aboutContent{
-    width: 40vw;
+    width: 80vw;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 2vh;

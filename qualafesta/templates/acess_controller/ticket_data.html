@@ -11,15 +11,18 @@
 <div class="eventsSpot" style="gap:1vh">
     <div class="aboutContent">
         <h1 id="eventName">Cliente: {{first_name}} {{last_name}}</h1>
-    </div>
-    <img  class="userImage" style=" overflow: hidden; border-radius:20px;" src="{% if profile_image %}{% get_media_prefix %}{{ profile_image }}{% else %} /media/images/profile_default.png{%endif%}"> 
+        <h1 id="eventName">Ingresso: {{category}}</h1>
+        <img  class="userImage" style=" overflow: hidden; border-radius:20px;" src="{% if profile_image %}{% get_media_prefix %}{{ profile_image }}{% else %} /media/images/profile_default.png{%endif%}"> 
     <a class="controll" href="{% url 'qualafesta:validate_ticket' event_id=event_id ticket_hash=ticket_hash%}">VALIDAR</a>
-</div>
+
+    </div>
+    </div>
 
 {% else %}
 <div class="aboutContent">
+    <h1 id="eventName">ACESSO NEGADO</h1>
     <h1 id="eventName">{{error_message}}</h1>
-    <a class="controll" href="{% url 'qualafesta:controll_event' pk=event_id%}">Voltar</a>
+    <a class="controll" href="{% url 'qualafesta:controll_event' pk=event_id%}">VOLTAR</a>
 </div>
 {% endif %}
 
