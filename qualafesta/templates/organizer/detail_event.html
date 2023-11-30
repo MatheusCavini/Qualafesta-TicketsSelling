@@ -18,8 +18,15 @@
     </div>
     {% endif %}
     <div class="splashImage">
-        <div class="aboutContent">
-            <h1 id="eventName">{{event.name}}</h1>
+        <div class="aboutContent" >
+            <div style=" width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                <h1 style="width: 100%;" id="eventName">{{event.name}}</h1>
+                <a href="{% url 'qualafesta:update_event' event.id %}" style="text-decoration: none; margin-left:auto; margin-right: 2vw;">
+                    <img src="{% static 'images/edit.svg' %}" alt="edit icon">
+                </a>
+
+
+            </div>
             <div class="divLine"></div>
             <div id="tabs">
                 <a href="{% url 'qualafesta:detail_event' event.id %}">
@@ -32,9 +39,6 @@
                     <h3 class="tabName">INGRESSOS</h3>
                 </a>
             </div>
-            <div style="width: 100%; margin-left: 2.5vw;"><button class="edit-button"><a
-                        href="{% url 'qualafesta:update_event' event.id %}"
-                        style="text-decoration: none;">Editar</a></button></div>
             <div style="overflow-y: scroll;">
                 <h3 class="sectionName">DESCRIÇÃO</h3>
                 <p class="eventInfo">{{event.description}}</p>

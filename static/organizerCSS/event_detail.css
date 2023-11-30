@@ -1,9 +1,9 @@
 .edit-button {
     display: flex;
-    width: 160px;
+    flex-direction: row;
     height: 36px;
     padding: 8px;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: 8px;
     flex-shrink: 0;
     border-radius: 8px;
