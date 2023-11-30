@@ -55,6 +55,23 @@
 
 }
 
+a.controll{
+    margin: 2vh;
+    width: 14vw;
+    height: 6vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: blueviolet solid;
+    color: #FFF;
+    background-color: blueviolet;
+    border-radius: 1vh;
+    font-weight: 600;
+    font-size: medium;    
+    text-decoration: none;
+}
+
 @media only screen and (max-width: 767px) {
     .header{
         display: flex;
@@ -95,4 +112,22 @@
         height: 6rem;
         border-radius: 7rem;
     }
+
+    a.controll{
+        margin: 2vh;
+        width: 10w;
+        height: 6vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: blueviolet solid;
+        color: #FFF;
+        background-color: blueviolet;
+        border-radius: 1vh;
+        font-weight: 600;
+        font-size: medium;    
+        text-decoration: none;
+    }
+    
 }
