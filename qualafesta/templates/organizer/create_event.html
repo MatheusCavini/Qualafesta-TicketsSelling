@@ -8,6 +8,7 @@ organizer
 {% block style %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'forms.css' %}">
 {% endblock style%}
 
 {% block content %}
@@ -26,14 +27,14 @@ organizer
 
 
 {% if user.is_authenticated %}
-<p>pagina do usuario</p>
 
 
-<form method="POST" action="{% url 'qualafesta:create_event' %}">
-    <h2>Adicionar novo Evento</h2>
+
+<form method="POST" action="{% url 'qualafesta:create_event' %}" style="margin-top: 32px;">
+   
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="add-button">Criar</button>
+    <button type="submit" class="add-button">CRIAR</button>
 </form>
 {% else %}
 
