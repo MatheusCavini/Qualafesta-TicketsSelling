@@ -35,7 +35,7 @@ organizer
         <img  width="9rem" height="10.5rem" class="artistImage" src = "{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/> 
         <div class="artistInfo">
 
-        <a href="{% url 'qualafesta:aboutEvent' event.id%}" style="text-decoration: none; color: black;">
+        <a href="{% url 'qualafesta:detail_event' event.id%}" style="text-decoration: none; color: black;">
             <h2 style="font-size: 2.5rem;">{{event.name}}</h2>
         </a>
             <h3 style="font-size: 1.7rem;">{{event.date_time|date:"d/m/Y - H:i"}}</h3>
