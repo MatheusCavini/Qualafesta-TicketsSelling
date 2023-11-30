@@ -32,13 +32,14 @@
 </div>
 {% else %}
 {% endif %}
+<h2 class="meusIngressos">SELECIONE UM EVENTO PARA CONTROLAR</h2>
 <div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start;">
     {% for event in event_list %}
     <div class="artistCard"> 
         <img  width="9rem" height="10.5rem" class="artistImage" src = "{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/> 
         <div class="artistInfo">
 
-        <a href="{% url 'qualafesta:aboutEvent' event.id%}" style="text-decoration: none; color: black;">
+        <a href="{% url 'qualafesta:controll_event' event.id%}" style="text-decoration: none; color: black;">
             <h2 style="font-size: 2.5rem;">{{event.name}}</h2>
         </a>
             <h3 style="font-size: 1.7rem;">{{event.date_time|date:"d/m/Y - H:i"}}</h3>

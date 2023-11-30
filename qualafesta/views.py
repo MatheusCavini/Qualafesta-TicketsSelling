@@ -514,6 +514,8 @@ def get_ticket_data(ticket_hash, event_id):
     try:
         purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
         ticket_order = purchased_ticket.ticket_order_id
+        ticket_cattegory = purchased_ticket.ticket_category_id
+        event = ticket_cattegory.event_id 
         user = ticket_order.customer_id 
         customer = Customer.objects.get(user_id=user.id)
         context ={
@@ -524,6 +526,7 @@ def get_ticket_data(ticket_hash, event_id):
             'profile_image': customer.profile_image,
             'user':user,
             'correct':True,
+            'category':ticket_cattegory.name
         }
         if purchased_ticket.status:
             context['correct'] = False
@@ -531,6 +534,11 @@ def get_ticket_data(ticket_hash, event_id):
         elif ticket_order.payment_situation != 1:
             context['correct'] = False
             context['error_message'] ='O pagamento deste ingresso não foi efetuado'
+        elif event.id != event_id:
+            print(event.id)
+            print(event_id)
+            context['correct'] = False
+            context['error_message'] ='Esse ingresso pertence a outro evento.'
     except:
         context ={
             'ticket_hash': ticket_hash,

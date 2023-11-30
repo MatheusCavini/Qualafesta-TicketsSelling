@@ -114,20 +114,8 @@ a.controll{
     }
 
     a.controll{
-        margin: 2vh;
-        width: 10w;
-        height: 6vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border: blueviolet solid;
-        color: #FFF;
-        background-color: blueviolet;
-        border-radius: 1vh;
-        font-weight: 600;
-        font-size: medium;    
-        text-decoration: none;
+        display: none;
+        flex: 0;
     }
-    
+
 }
