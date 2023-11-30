@@ -72,7 +72,7 @@ header{
 
 button.search{
     margin: 2vh;
-    width: 14vw;
+    width: 20vw;
     height: 6vh;
     display: flex;
     flex-direction: column;
@@ -177,7 +177,7 @@ form.formHash{
 
 a.controll{
     margin: 2vh;
-    width: 14vw;
+    width: 20vw;
     height: 6vh;
     display: flex;
     flex-direction: column;
