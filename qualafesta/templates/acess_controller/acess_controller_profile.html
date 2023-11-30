@@ -1,6 +1,12 @@
 {% extends 'acessControllerBase.html' %}
 {% load static %} 
 
+{%block style%}
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerTickets.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+
+{%endblock style%}
+
 {% block content %}
 
 <div style=" width: 100vw; margin-left: 25vw;">
@@ -12,6 +18,7 @@
     <h3 class="fieldValue"> {{request.user.username}}</h3>
     <h2 class="fieldName">Telefone de contato:</h2>
     <h3 class="fieldValue"> {{user_instance.phone}}</h3>
+    
 </div>
 
 

@@ -32,7 +32,7 @@
                 <a class="hideWhenMobile" href="{% url 'qualafesta:acess_controller' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
                 <a href="{% url 'qualafesta:acess_controller' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
                 <a href="{% url 'qualafesta:search_event_controller'%}"> <img class="navIcon" src="{% static '/images/searchIcon.svg' %}" alt="Logo"></a>
-                <a href="{% url 'qualafesta:customerProfile'%}"><img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>
+                <a href="{% url 'qualafesta:acessControllerProfile'%}"><img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>
             </div>
         </div>
         <div class="content">
