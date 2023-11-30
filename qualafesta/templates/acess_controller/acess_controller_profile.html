@@ -1,0 +1,18 @@
+{% extends 'acessControllerBase.html' %}
+{% load static %} 
+
+{% block content %}
+
+<div style=" width: 100vw; margin-left: 25vw;">
+    <h2 class="fieldName">Nome:</h2>
+    <h3 class="fieldValue"> {{request.user.first_name}}</h3>
+    <h2 class="fieldName">Sobrenome:</h2>
+    <h3 class="fieldValue"> {{request.user.last_name}}</h3>
+    <h2 class="fieldName">Nome de usuário:</h2>
+    <h3 class="fieldValue"> {{request.user.username}}</h3>
+    <h2 class="fieldName">Telefone de contato:</h2>
+    <h3 class="fieldValue"> {{user_instance.phone}}</h3>
+</div>
+
+
+{% endblock content %}

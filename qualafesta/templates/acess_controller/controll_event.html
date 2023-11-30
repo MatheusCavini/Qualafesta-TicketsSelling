@@ -1,0 +1,86 @@
+{% extends 'acessControllerBase.html' %}
+{% load static %} 
+{% block style %}  
+<!--<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const event_id = document.getElementById('event-data').dataset.eventId;
+    const context = canvas.getContext('2d');
+    // Obter acesso à câmera do usuário
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            // Chama a função para processar cada quadro
+            setInterval(processVideo, 1000); // Chama a cada segundo
+        })
+        .catch(err => {
+            console.error('Erro ao acessar a câmera: ', err);
+        });
+
+    function processVideo() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const currentUrl = window.location.href;
+        // Converter o canvas para base64
+        const imageBase64 = canvas.toDataURL('image/png');
+
+        canvas.toBlob(blob => {
+            //const formData = new FormData();
+            //formData.append('image', blob, 'image.png');
+            jsonData = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: imageBase64, event_id:event_id})
+        };
+
+            fetch('/scan/', jsonData)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const hash = data.hash_code;
+                const redirectUrl = data.redirect_url;
+                if (hash !== null) {
+                    console.log(hash);
+                }
+                if (redirectUrl) {
+                    const newUrl = currentUrl + redirectUrl;
+                    window.location.href = newUrl;
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar imagem: ', error);
+            });
+        }, 'image/png');
+    }
+});
+
+document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        document.getElementById('id_query').value = '';
+    });
+</script>
+{% endblock style %}
+
+
+{% block content %}
+<div class="eventsSpot" style="gap:3vh">
+        <div id="event-data" data-event-id="{{ event.id }}"></div>
+    <div class="aboutContent">
+        <h1 id="eventName">{{event.name}}</h1>
+        <h2 id="eventName">{{event.date_time}}</h2>
+    </div>
+    <video id="video" width="300" height="300" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <form class="formHash" id="searchForm" action="{% url 'qualafesta:ticket_detail' event.id %}">
+        <p>
+            <input class="input_cattegory" type="text" name="query" id="id_query" placeholder="Ticket Hash" />
+        </p>
+        <button style="margin: 3vh;" class="search" type="submit">Buscar</button>
+    </form>
+</div>
+{% endblock content %} 

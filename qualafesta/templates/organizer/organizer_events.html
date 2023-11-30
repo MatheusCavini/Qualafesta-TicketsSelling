@@ -9,6 +9,8 @@ organizer
 
 <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'organizerCSS/events_page.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+
 {% endblock style%}
 
 {% block content %}
@@ -23,30 +25,30 @@ organizer
     </div>
     <a href="/logout"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
 </div>
-<h1>Meus Eventos</h1>
+<h1>MEUS EVENTOS</h1>
 
 {% if user.is_authenticated %}
 <p>Eventos do organizador</p>
 <div class="events-section">
     {% if event_list %}
     {% for event in event_list %}
-    <div class="event-div">
-        <img src="{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"
-            class="event-image" alt="{{event.name}} event Image">
-        <div class="event-content">
-            <h3><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.name}}</a></h3>
-            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.date_time}}</a></p>
-            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.location}}</a></p>
-            <p><a href="{% url 'qualafesta:detail_event' event.id %}" class="event-link">{{event.capacity}}</a></p>
+    <div class="artistCard"> 
+        <img  width="9rem" height="10.5rem" class="artistImage" src = "{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/> 
+        <div class="artistInfo">
+
+        <a href="{% url 'qualafesta:detail_event' event.id%}" style="text-decoration: none; color: black;">
+            <h2 style="font-size: 2.5rem;">{{event.name}}</h2>
+        </a>
+            <h3 style="font-size: 1.7rem;">{{event.date_time|date:"d/m/Y - H:i"}}</h3>
+
         </div>
-    </div>
+        </div>
     {% endfor %}
     {% else %}
     <p>Sem eventos disponíveis</p>
     {% endif %}
     <a href="{% url 'qualafesta:create_event' %}" style="margin-top: 2.5vh; margin-bottom: 5vh;"><button
-            class="add-button">+
-            Adicionar</button></a>
+            class="add-button" style="border: 0;">+ ADICIONAR</button></a>
 </div>
 
 {% else %}

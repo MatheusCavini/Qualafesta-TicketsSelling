@@ -8,6 +8,7 @@ organizer
 {% block style %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'forms.css' %}">
 {% endblock style%}
 
 {% block content %}
@@ -32,7 +33,7 @@ organizer
     <h2>Adicionar nova Atração</h2>
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="add-button">Criar</button>
+    <button type="submit" class="add-button">CRIAR</button>
 </form>
 
 {% else %}

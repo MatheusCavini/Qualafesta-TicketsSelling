@@ -1,0 +1,21 @@
+{% extends 'acessControllerBase.html' %}
+{% load static %} 
+{% block title %}{% endblock title%}
+{% block style %}{% endblock style %}
+{% block content %}
+
+
+<form class="formHash" id="searchForm" action="{% url 'qualafesta:search_event_controller'%}">
+    <p>
+        <input class="input_cattegory" type="text" name="search_event_controller" id="id_search_event_controller" placeholder="Buscar Eventos" />
+    </p>
+    <button style="margin: 3vh;" class="search" type="submit">Buscar</button>
+</form>
+{% if error_message %}
+<div class="aboutContent">
+    <h2 id="eventName">{{error_message}}</h2>
+</div>
+{% else %}
+{% endif %}
+
+{% endblock content %}

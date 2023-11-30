@@ -1,0 +1,23 @@
+{% extends 'acessControllerBase.html' %}
+{% load static %} 
+{% block title %}{% endblock title%}
+{% block style %}{% endblock style %}
+{% block content %}
+{% if correct %}
+<a href="{% url 'qualafesta:controll_event' event_id %}"><img src="{% static '/images/LAC.svg' %}" style="width: 1.5rem; margin: 0 1.5rem;"></a>
+<div class="eventsSpot" style="gap:3vh">
+    <div class="aboutContent">
+        <h1 id="eventName">Cliente: {{first_name}} {{last_name}}</h1>
+    </div>
+    <img style="height: 50vh; width: 50vh; overflow: hidden; border-radius:20px;" src="{% if profile_image %}{% get_media_prefix %}{{ profile_image }}{% else %} /media/images/profile_default.png{%endif%}"> 
+    <a class="controll" href="{% url 'qualafesta:validate_ticket' event_id=event_id ticket_hash=ticket_hash%}">Validar</a>
+</div>
+
+{% else %}
+<div class="aboutContent">
+    <h1 id="eventName">{{error_message}}</h1>
+    <a class="controll" href="{% url 'qualafesta:controll_event' pk=event_id%}">Voltar</a>
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -3,16 +3,15 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         # Set placeholders for the username and password fields
         self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
         self.fields['password'].widget.attrs['placeholder'] = 'Senha'
-
-
 
 class CustomerRegistrationForm(UserCreationForm):
     profile_image = forms.ImageField(required=False)
@@ -20,7 +19,6 @@ class CustomerRegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=255, required=True)
     last_name = forms.CharField(max_length=255, required=True)
     username = forms.CharField(max_length=255, required=True)
-    
 
     class Meta:
         model = User
@@ -122,6 +120,11 @@ class AttractionForm(ModelForm):
     end_time = forms.DateTimeField(required=True, initial=datetime.now())
     artist_image = forms.ImageField(required=False)
 
+    artist_name.label = "Nome da atração"
+    begin_time.label = "Horário de início"
+    end_time.label = "Horário de término"
+    artist_image.label = "Imagem"
+
     class Meta:
         model = ArtistParticipation
         fields = fields = [
@@ -130,6 +133,7 @@ class AttractionForm(ModelForm):
             'end_time',
             'artist_image',
         ]
+
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['artist_name'].widget.attrs['placeholder'] = 'Nome'
