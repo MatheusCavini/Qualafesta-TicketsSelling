@@ -340,6 +340,12 @@ class EventListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Event.objects.filter(organizer_id=self.request.user)
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+    
 class OrgEventAboutView(LoginRequiredMixin, generic.DetailView):
     model = Event
     template_name = 'organizer/detail_event.html'
@@ -444,6 +450,11 @@ def create_event(request):
 class OrgTicketsView(LoginRequiredMixin, generic.DetailView):
     model = Event
     template_name = 'organizer/organizer_eventTickets.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
 
 def create_ticket(request, pk):
     event = Event.objects.get(id=pk)
