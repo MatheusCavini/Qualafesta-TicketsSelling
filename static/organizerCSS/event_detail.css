@@ -21,6 +21,7 @@
     gap: 8px;
     flex-shrink: 0;
     border-radius: 8px;
-    background: var(--E, #4B02B3);
+    background: blueviolet;
     color: white;
+    text-decoration: None;
 }

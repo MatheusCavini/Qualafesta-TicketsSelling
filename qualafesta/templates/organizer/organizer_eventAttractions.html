@@ -59,7 +59,7 @@
                     DIVULGADAS.</p>
             </div>
             {%endif%}
-            <a style="margin-top: 2.5vh; margin-bottom: 5vh;" href="{% url 'qualafesta:create_attraction' event.id %}">
+            <a style="margin-top: 2.5vh; margin-bottom: 5vh; text-decoration: none;" href="{% url 'qualafesta:create_attraction' event.id %}">
                 <button style="    display: flex;
                 width: 120px;
                 height: 36px;
@@ -69,7 +69,9 @@
                 gap: 8px;
                 flex-shrink: 0;
                 border-radius: 8px;
-                background: var(--E, #4B02B3);
+                background: blueviolet;
+                text-decoration: none;
+                border: 0;
                 color: white;">+
                     Adicionar</button></a>
         </div>

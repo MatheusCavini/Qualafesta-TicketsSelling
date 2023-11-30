@@ -43,7 +43,7 @@ def index(request):
     try:
         organizer = Organizer.objects.get(user_id=user)
         return HttpResponseRedirect(
-            reverse('qualafesta:organizer'))
+            reverse('qualafesta:organizer_events'))
     except: pass
     try:
         acess_controller = AcessController.objects.get(user_id=user)
@@ -70,7 +70,7 @@ def login(request):
         try:
             organizer = Organizer.objects.get(user_id=user)
             return HttpResponseRedirect(
-                reverse('qualafesta:organizer'))
+                reverse('qualafesta:organizer_events'))
         except: pass
         try:
             acess_controller = AcessController.objects.get(user_id=user)
