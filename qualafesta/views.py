@@ -227,7 +227,14 @@ def TicketsListViews(request):
     return render(request, 'customer/customer_ticketsList.html', {'ticketsorder': ticketsorder, 'user_instance':user_instance})
 
 def CustomerProfile(request):
-    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    try:
+        user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    except: 
+        try:
+            user_instance = get_object_or_404(Organizer, user_id=request.user.id)
+        except: 
+            user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    
     return render(request, 'customer/customer_profile.html', {'user_instance':user_instance})
 
 def generate_qr_code(request, text):
