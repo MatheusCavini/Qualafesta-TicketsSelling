@@ -469,6 +469,11 @@ def create_ticket(request, pk):
         form = TicketForm()
         context = {'form': form, 'event': event}
         return render(request, 'organizer/create_ticket.html', context)   
+    
+def organizer_profile(request):
+    user_instance = get_object_or_404(Organizer, user_id=request.user.id)
+    return render(request, 'organizer/organizer_profile.html', {'user_instance':user_instance})
+
 
 
 ######################################################################## Acesss Controller Views

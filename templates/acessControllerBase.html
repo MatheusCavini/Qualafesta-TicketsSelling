@@ -27,7 +27,7 @@
         <a href="{% url 'qualafesta:logout' %}"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
     </header>
     <div class="bodyNav">
-        <div class="navbarRegion" >
+        <div class="navbarRegion" style="z-index: 10000;" >
             <div class="navbar">
                 <a class="hideWhenMobile" href="{% url 'qualafesta:acess_controller' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
                 <a href="{% url 'qualafesta:acess_controller' %}"><img class="navIcon" src="{% if request.path == '/customer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>

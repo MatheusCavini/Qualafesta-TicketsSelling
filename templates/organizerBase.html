@@ -2,43 +2,33 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-16">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerMain.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap&subset=latin-ext"
-        rel="stylesheet">
-    {% block style %} {% endblock style %}
-    <title>{% block title %}{% endblock %}</title>
-</head>
+    <head>
+        <meta charset="UTF-16">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <link rel="stylesheet" type="text/css" href="{% static 'global.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerMain.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap&subset=latin-ext" rel="stylesheet">
+        {% block style %}  {% endblock style %}
+        <title>{% block title %}{% endblock %}</title>
+    </head>
 
 <body class="customerBody">
-    <div class="navbarRegion">
+    <div class="navbarRegion" style="z-index: 10000;">
         <div class="navbar">
-            <a class="hideWhenMobile" href="{% url 'qualafesta:organizer' %}"><img class="logo"
+            <a class="hideWhenMobile" href="{% url 'qualafesta:organizer_events' %}"><img class="logo"
                     src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
-            <a href="{% url 'qualafesta:organizer' %}"><img class="navIcon"
+            <a href="{% url 'qualafesta:organizer_events' %}"><img class="navIcon"
                     src="{% if request.path == '/organizer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}"
                     alt="Logo"></a>
-            <a href="{% url 'qualafesta:organizer_events' %}"><img id="navIconCal"
-                    src="{% if request.path == '/organizer/events' %}{% static '/images/calendarIconActive.svg' %}{%else%}{% static '/images/calendarIcon.svg' %}{%endif%}"
-                    alt="Logo"></a>
-            <img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo">
-
+            <a href="{% url 'qualafesta:organizerProfile' %}"> <img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>      
         </div>
     </div>
     <div class="content">
         {% block content %}
         {% endblock content %}
     </div>
-
-
 </body>
-
 </html>
