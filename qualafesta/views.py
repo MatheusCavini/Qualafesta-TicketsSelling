@@ -298,6 +298,7 @@ def create_purchased_tickets(request):
 
             # Assuming you have a model for TicketCattegory
             ticket_category = get_object_or_404(TicketCattegory, id=ticket_category_id)
+            print(ticket_category)
 
             # Create PurchasedTicket instances
             for _ in range(quantity):
@@ -307,13 +308,14 @@ def create_purchased_tickets(request):
 
                 # Combine the sections with hyphens
                 code = f"{section1}-{section2}-{section3}"
-                PurchasedTicket.objects.create(
+                purchased_ticket = PurchasedTicket.objects.create(
                     ticket_order_id=order,
                     ticket_category_id=ticket_category,
                     hash_code = code,
                 )
                 ticket_category.sold_amount += 1
                 ticket_category.save()
+                purchased_ticket.save()
                 print(ticket_category.sold_amount)
 
         return JsonResponse({'success': True, 'message': 'Purchased tickets created successfully'})
@@ -452,7 +454,7 @@ def create_ticket(request, pk):
         description= request.POST['description']
         capacity = request.POST['capacity']
         price = request.POST['price']
-        sold_amount = request.POST['sold_amount']
+        sold_amount = 0
         ticket_kwargs = {
                 'event_id': event,
                 'name':name,
@@ -539,11 +541,6 @@ def get_ticket_data(ticket_hash, event_id):
         elif ticket_order.payment_situation != 1:
             context['correct'] = False
             context['error_message'] ='O pagamento deste ingresso não foi efetuado'
-        elif event.id != event_id:
-            print(event.id)
-            print(event_id)
-            context['correct'] = False
-            context['error_message'] ='Esse ingresso pertence a outro evento.'
     except:
         context ={
             'ticket_hash': ticket_hash,

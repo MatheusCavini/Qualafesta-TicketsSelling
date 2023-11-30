@@ -157,7 +157,6 @@ class TicketForm(ModelForm):
     description = forms.CharField(max_length=255, required=True)
     capacity = forms.IntegerField(required=True)
     price = forms.IntegerField(required=True)
-    sold_amount = forms.IntegerField(required=True)
 
     class Meta:
         model = ArtistParticipation
@@ -166,7 +165,6 @@ class TicketForm(ModelForm):
             'description',
             'capacity',
             'price',
-            'sold_amount',
         ]
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -174,4 +172,3 @@ class TicketForm(ModelForm):
         self.fields['description'].widget.attrs['placeholder'] = 'Descrição'
         self.fields['capacity'].widget.attrs['placeholder'] = 'Capacidade'
         self.fields['price'].widget.attrs['placeholder'] = 'Preço'
-        self.fields['sold_amount'].widget.attrs['placeholder'] = 'Quantidade Vendida'
