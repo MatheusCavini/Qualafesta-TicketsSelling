@@ -458,11 +458,15 @@ def list_events(request):
     return render(request, 'eventes/index.html', context)
 #####################################
 def search_events(request):
-    context = {}
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    context = {'user_instance':user_instance}
     if request.GET.get('query', False):
         search_term = request.GET['query'].lower()
+        user_instance = get_object_or_404(Customer, user_id=request.user.id)
         event_list = Event.objects.filter(name__icontains=search_term)
-        context = {"event_list": event_list}
+        if len(event_list) == 0:
+            event_list = "nenhum resultado"
+        context = {'user_instance':user_instance, "event_list": event_list}
     return render(request, 'customer/search.html',context)
 
 def CustomerIndex(request):

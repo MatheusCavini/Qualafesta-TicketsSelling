@@ -1,31 +1,5 @@
 /* Reset de estilos para garantir consistência entre navegadores */
-body, h1, h2, p, input, button, footer {
-    margin: 0;
-    padding: 0;
-}
 
-body {
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    min-height: 100vh;
-    background-color: #f5f5f5; /* Adicione uma cor de fundo */
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-left: 250px; /* Largura da aba lateral */
-    padding: 20px;
-    margin-top: 50px; /* Ajuste a margem superior conforme necessário */
-}
-
-h2 {
-    font-size: 36px; /* Aumenta o tamanho da fonte para 36px */
-    margin-bottom: 40px;
-    color: #6a0dad; /* Cor roxa para os títulos */
-}
 
 form {
     margin-bottom: 20px;
@@ -36,13 +10,17 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"] {
-    width: 30%; /* Aumenta o tamanho horizontal em 20% */
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    border: 2px solid #6a0dad; /* Adiciona uma borda roxa */
-    border-radius: 10px; /* Adiciona bordas arredondadas */
+input {
+    width: 40vw; /* Aumenta o tamanho horizontal em 80% */
+    background-color: #e0e0e0; /* Cor roxa para o botão */
+    color: #000;
+    padding: 15px 40px; /* Aumenta o preenchimento do botão */
+    border: none;
+    cursor: pointer;
+    font-size: 20px; /* Aumenta o tamanho da fonte para 20px */
+    text-decoration: none; /* Remover sublinhado do botão */
+    margin-bottom: 40px; /* Ajuste a margem inferior conforme necessário */
+    border-radius: 3rem;
 }
 
 .button {
@@ -55,6 +33,7 @@ input[type="text"] {
     font-size: 20px; /* Aumenta o tamanho da fonte para 20px */
     text-decoration: none; /* Remover sublinhado do botão */
     margin-bottom: 40px; /* Ajuste a margem inferior conforme necessário */
+    border-radius: 3rem;
 }
 
 button:hover {
@@ -86,11 +65,37 @@ a {
     text-decoration: none;
 }
 
-/* Rodapé simples */
-footer {
-    margin-top: 20px;
-    padding: 10px 0;
-    background-color: #6a0dad; /* Cor roxa para o rodapé */
-    color: #fff;
-    text-align: center;
+
+
+
+@media only screen and (max-width: 767px) {
+    input {
+        width: 90vw; /* Aumenta o tamanho horizontal em 80% */
+        background-color: #e0e0e0; /* Cor roxa para o botão */
+        color: #000;
+        padding: 15px 40px; /* Aumenta o preenchimento do botão */
+        border: none;
+        cursor: pointer;
+        font-size: 20px; /* Aumenta o tamanho da fonte para 20px */
+        text-decoration: none; /* Remover sublinhado do botão */
+        margin-bottom: 40px; /* Ajuste a margem inferior conforme necessário */
+        border-radius: 3rem;
+        margin: 5vw;
+        box-sizing: border-box;
+    }
+
+    .button {
+        width: 40vw; /* Aumenta o tamanho horizontal em 80% */
+        background-color: #6a0dad; /* Cor roxa para o botão */
+        color: #fff;
+        padding: 15px 40px; /* Aumenta o preenchimento do botão */
+        border: none;
+        cursor: pointer;
+        font-size: 20px; /* Aumenta o tamanho da fonte para 20px */
+        text-decoration: none; /* Remover sublinhado do botão */
+        margin-bottom: 40px; /* Ajuste a margem inferior conforme necessário */
+        border-radius: 3rem;
+        margin: 0 30vw;
+    }
+
 }
