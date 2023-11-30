@@ -12,7 +12,6 @@ from django.test import RequestFactory
 from .models import Event, TicketsOrder, TicketCattegory
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from pyzbar.pyzbar import decode
 import numpy as np
 import uuid
 import cv2
@@ -584,19 +583,21 @@ def scan_qr(request):
         nparr = np.frombuffer(image_data, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        decoded_objects = decode(gray_img)
-        if decoded_objects:
-            qr_data = decoded_objects[0].data.decode('utf-8')
-            redirect_url = f'ticket_detail?query={qr_data}'
+        detector = cv2.QRCodeDetector()
+        data_str, bbox, _ = detector.detectAndDecode(gray_img)
+        if data_str!='':
+            redirect_url = f'ticket_detail?query={data_str}'
             return JsonResponse({'message': 'QR code decodificado com sucesso', 
                                  'redirect_url': redirect_url,
-                                 'hash_code': qr_data})
+                                 'hash_code': data_str})
         else:
             return JsonResponse({'message': 'Nenhum QR code encontrado', 
                                  'redirect_url':None,'hash_code':None})
     else:
         return JsonResponse({'error': 'Invalid request method'})
-    
+            
+        
+
 def acess_controller_profile(request):
     user_instance = get_object_or_404(AcessController, user_id=request.user.id)
     return render(request, 'acess_controller/acess_controller_profile.html', {'user_instance':user_instance})

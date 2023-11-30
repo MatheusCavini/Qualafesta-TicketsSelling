@@ -12,7 +12,6 @@ psutil==5.9.6
 psycopg2-binary==2.9.9
 pypng==0.20220715.0
 pytz==2023.3.post1
-pyzbar==0.1.9
 qrcode==7.4.2
 sqlparse==0.4.4
 traitlets==5.9.0
