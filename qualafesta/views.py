@@ -478,22 +478,18 @@ def is_acess_controller(user):
 @login_required
 @user_passes_test(is_acess_controller)
 @csrf_exempt
+
+
 def search_event_controller(request):
     user_instance = get_object_or_404(AcessController, user_id=request.user.id)
     context = {'user_instance':user_instance}
-    try:
-        search = request.GET['search_event_controller']
-        events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
-        if len(events)>0:
-            context['event_list'] = events
-            context['search_message'] = f'Resultados para a busca de "{search}"'
-            return render(request, 'acess_controller/acess_controller_index.html', context)
-        else:
-            context['error_message'] = f'Nenhum evento encontrado para a busca "{search}"'
-            print(context)
-            return render(request, 'acess_controller/search_event_controller.html', context)
-    except:
-        return render(request, 'acess_controller/search_event_controller.html', context)
+    if request.GET.get('query', False):
+        search_term = request.GET['query'].lower()
+        event_list = Event.objects.filter(Q(name__icontains=search_term) | Q(description__icontains=search_term))
+        if len(event_list) == 0:
+            event_list = "nenhum resultado"
+        context = {'user_instance':user_instance, "event_list": event_list}
+    return render(request, 'acess_controller/search_event_controller.html', context)
       
 class EventControllerViews(generic.ListView):
     model = Event

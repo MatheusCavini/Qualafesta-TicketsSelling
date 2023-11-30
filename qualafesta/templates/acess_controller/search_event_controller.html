@@ -1,24 +1,66 @@
 {% extends 'acessControllerBase.html' %}
 {% load static %} 
-{% block title %}{% endblock title%}
-{% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'acessControllerCSS/acessControllerMain.css' %}">
 
+{% block title %}Eventos{% endblock title%}
+
+{% block style %}  
+
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerSearch.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerEvent.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'customerCSS/customerTickets.css' %}">
 {% endblock style %}
+
 {% block content %}
+<div class="header">
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
+    <img class="profileImage" src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
+    <div class="headerInfo">
+        <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
+        <p class="welcome">Bem-vindo ao App Qualafesta!</p>
+    </div>
+    </div>
+    <a href="/logout"><img src="{% static '/images/logoutIcon.svg' %}" style="width: 2.5rem; margin: 0 1.5rem;"></a>
+</div>
 
+    <h1>   </h1>
+    <!-- Adicione a tag img com o caminho ou URL da sua imagem no atributo src -->
 
-<form class="formHash" id="searchForm" action="{% url 'qualafesta:search_event_controller'%}">
+<h2 class="meusIngressos">Qual evento deseja controlar?</h2>
+<form action="{% url 'qualafesta:search_event_controller' %}">
     <p>
-        <input class="input_cattegory" type="text" name="search_event_controller" id="id_search_event_controller" placeholder="Buscar Eventos" />
+        <label for="id_query"></label>
+        <input type="text" name="query" id="id_query" placeholder="🔍︎  Buscar Eventos por nome"/>
     </p>
-    <button style="margin: 3vh;" class="search" type="submit">Buscar</button>
+    <button type="submit" class=" button">BUSCAR</button>
 </form>
-{% if error_message %}
-<div class="aboutContent">
-    <h2 id="eventName">{{error_message}}</h2>
+
+{% if event_list %}
+<h2 class="meusIngressos">RESULTADOS</h2>
+{% if event_list != "nenhum resultado"%}
+<div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y: scroll;">
+    {% for event in event_list %}
+        <div class="artistCard"> 
+        <img  width="9rem" height="10.5rem" class="artistImage" src = "{% if event.thumb_image %}{{event.thumb_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/> 
+        <div class="artistInfo">
+
+        <a href="{% url 'qualafesta:controll_event' event.id%}" style="text-decoration: none; color: black;">
+            <h2 style="font-size: 2.5rem;">{{event.name}}</h2>
+        </a>
+            <h3 style="font-size: 1.7rem;">{{event.date_time|date:"d/m/Y - H:i"}}</h3>
+
+        </div>
+        <a class="controll" href="{% url 'qualafesta:controll_event' event.id%}" >Controlar</a>
+        </div>
+        
+    
+    {% endfor %}
 </div>
 {% else %}
-{% endif %}
+<div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+<p style="font-size: 2rem; font-weight: 500; text-align: center;"> NÃO FOI ENCONTRADO EVENTO COM ESSE NOME.</p>
+</div>
+{%endif%}
+{%endif%}
 
-{% endblock content %}
+{% endblock content %}

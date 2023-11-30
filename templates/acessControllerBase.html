@@ -20,7 +20,7 @@
             <a class="hideWhenMobile" href="{% url 'qualafesta:acess_controller' %}"><img class="logo" src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
             <a href="{% url 'qualafesta:acess_controller' %}"><img class="navIcon" src="{% if request.path == '/acess_controller/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}" alt="Logo"></a>
             <a href="{% url 'qualafesta:search_event_controller'%}"> <img class="navIcon" src="{% if request.path == '/acess_controller/search/' %}{% static '/images/searchIconActive.png' %}{%else%}{% static '/images/searchIcon.svg' %}{%endif%}" alt="Logo"></a>
-            <a href="{% url 'qualafesta:acessControllerProfile'%}"><img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>
+            <a href="{% url 'qualafesta:acessControllerProfile'%}"><img class="navIcon" src="{% if request.path == '/acess_controller/profile/' %}{% static '/images/profileIconActive.svg' %}{%else%}{% static '/images/profileIcon.svg' %}{%endif%}" alt="Logo"></a>
         </div>
     </div>
     <div class="content" >

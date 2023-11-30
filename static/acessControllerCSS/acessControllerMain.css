@@ -6,9 +6,8 @@
     justify-content: space-around;
     align-items: center;
     gap: 1vh;
-    height: 100%;
+    height: 90%;
     width: 100%;
-    margin-bottom: 12vh;
     margin-left: 10vw;
 }
 
@@ -115,6 +114,11 @@ a.controll{
     height: 100%;
 }
 
+.userImage{
+    height: 50vh; 
+    width: 50vh
+}
+
 @media only screen and (max-width: 767px) {
    
     .controllContent{
@@ -163,6 +167,28 @@ a.controll{
         margin-bottom: 12vh;
         margin-left: 0;
     }
+    .userImage{
+        height: 70vw; 
+        width: 70vw
+    }
+    a.controll{
+        margin: 2vh;
+        width: 50vw;
+        height: 6vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: blueviolet solid;
+        color: #FFF;
+        background-color: blueviolet;
+        border-radius: 1vh;
+        font-weight: 600;
+        font-size: 2.5rem;    
+        text-decoration: none;
+    }
+
+    
 
 
     
