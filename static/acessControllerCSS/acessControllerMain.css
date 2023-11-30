@@ -104,7 +104,8 @@ form.formHash{
     justify-content: center;
     align-items: center;
     position: fixed;
-    left: 0;
+    left: 0;    
+    z-index: 1000;
 }
 
 .content{
