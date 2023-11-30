@@ -120,6 +120,11 @@ class AttractionForm(ModelForm):
     end_time = forms.DateTimeField(required=True, initial=datetime.now())
     artist_image = forms.ImageField(required=False)
 
+    artist_name.label = "Nome da atração"
+    begin_time.label = "Horário de início"
+    end_time.label = "Horário de término"
+    artist_image.label = "Imagem"
+
     class Meta:
         model = ArtistParticipation
         fields = fields = [
@@ -128,6 +133,7 @@ class AttractionForm(ModelForm):
             'end_time',
             'artist_image',
         ]
+
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['artist_name'].widget.attrs['placeholder'] = 'Nome'
