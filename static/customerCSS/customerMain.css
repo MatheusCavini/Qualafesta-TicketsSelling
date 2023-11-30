@@ -25,6 +25,7 @@
     height: 40rem;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     gap: 2rem;
     padding-top: 32px;
     flex-shrink: 0;
