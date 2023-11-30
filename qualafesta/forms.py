@@ -5,6 +5,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
+from datetime import datetime
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -89,9 +90,19 @@ class AcessControllerRegistrationForm(UserCreationForm):
         self.fields['password1'].help_text = None
         self.fields['password2'].help_text = None
 
+
 class EventForm(ModelForm):
+    name = forms.CharField(max_length=255, required=True)
+    location = forms.CharField(max_length=255, required=True)
+    date_time = forms.DateTimeField(required=True, initial=datetime.now())
+    description = forms.CharField(max_length=255, required=True)
+    capacity = forms.IntegerField(required=True)
+    splash_images = forms.ImageField(required=False)
+    thumb_image = forms.ImageField(required=False)
+    gender = forms.CharField(max_length=255, required=True)
+
     class Meta:
-        model = Event
+        model = ArtistParticipation
         fields = [
             'name',
             'location',
@@ -102,18 +113,18 @@ class EventForm(ModelForm):
             'thumb_image',
             'gender',
         ]
-        labels = {
-            'name' : 'Nome do Evento',
-            'location' : 'Localização',
-            'date_time' : 'Data',
-            'description' : 'Descrição',
-            'capacity' : 'Capacidade Máxima', 
-            'splash_images' : 'Imagens do Evento',
-            'thumb_image' : 'Imagem de Capa',
-            'gender' : 'Gênero',
-        }
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Nome'
+        self.fields['location'].widget.attrs['placeholder'] = 'Localização'
+        self.fields['date_time'].widget.attrs['placeholder'] = 'Data'
+        self.fields['description'].widget.attrs['placeholder'] = 'Descrição'
+        self.fields['capacity'].widget.attrs['placeholder'] = 'Capacidade Máxima'
+        self.fields['splash_images'].widget.attrs['placeholder'] = 'Imagens do Evento'
+        self.fields['thumb_image'].widget.attrs['placeholder'] = 'Imagem de Capa'
+        self.fields['gender'].widget.attrs['placeholder'] = 'Gênero'
 
-from datetime import datetime
+
 class AttractionForm(ModelForm):
     artist_name = forms.CharField(max_length=255, required=True)
     begin_time = forms.DateTimeField(required=True, initial=datetime.now())

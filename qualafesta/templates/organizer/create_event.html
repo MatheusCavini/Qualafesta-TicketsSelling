@@ -30,8 +30,7 @@ organizer
 
 
 
-<form method="POST" action="{% url 'qualafesta:create_event' %}" style="margin-top: 32px;">
-   
+<form method="POST" enctype="multipart/form-data" action="{% url 'qualafesta:create_event' %}" style="margin-top: 32px;">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="add-button">CRIAR</button>

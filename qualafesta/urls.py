@@ -21,9 +21,8 @@ urlpatterns = [
     path('acess_controller/profile/', views.acess_controller_profile, name='acessControllerProfile'),
     path('scan/', views.scan_qr, name='scan_qr'),
     path('organizer/events', views.EventListView.as_view(), name='organizer_events'),
-    path('organizer/createEvent', views.EventCreateView.as_view(), name='create_event'),
+    path('organizer/createEvent', views.create_event, name='create_event'),
     path('organizer/event/about/<int:pk>/', views.OrgEventAboutView.as_view(), name='detail_event'),
-    
 
     path('organizer/event/about/<int:pk>/attractions/', views.OrgAttractionsView.as_view(), name='event_attractions'),
     path('organizer/event/about/<int:pk>/createAttraction/', views.create_attraction, name = 'create_attraction'),

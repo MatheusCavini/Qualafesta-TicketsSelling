@@ -331,24 +331,6 @@ def organizer_index(request):
     user_instance = get_object_or_404(Organizer, user_id=request.user.id)
     return render(request, 'organizer/organizer_index.html', {"user_instance":user_instance})
 
-#def organizer_events(request):
-#   user_instance = get_object_or_404(Organizer, user_id=request.user.id)
-#   return render(request, 'organizer/organizer_events.html', {"user_instance":user_instance})
-class EventCreateView(generic.CreateView):
-    model = Event
-    form_class = EventForm
-    template_name = 'organizer/create_event.html'
-    #fields = ['name', 'location', 'date_time', 'description', 'capacity', 'splash_images', 'thumb_image', 'gender']
-    # Adicione todos os campos necessários do seu modelo Event
-
-    def form_valid(self, form):
-        # Define o organizador do evento como o usuário logado
-        form.instance.organizer_id = self.request.user
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return (reverse('qualafesta:organizer_events'))  
-    
 class EventListView(LoginRequiredMixin, generic.ListView):
     model = Event
     template_name = 'organizer/organizer_events.html'  
@@ -408,6 +390,55 @@ def create_attraction(request, pk):
         form = AttractionForm()
         context = {'form': form, 'event': event}
         return render(request, 'organizer/create_attraction.html', context)    
+    
+
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        name= request.POST['name']
+        location= request.POST['location']
+        date_time= request.POST['date_time']
+        description= request.POST['description']
+        capacity= request.POST['capacity']
+        gender= request.POST['gender']
+        splash_images= None
+        thumb_image= None
+        organizer_id = request.user
+        try:
+            splash_images = request.FILES['splash_images']
+            if splash_images:
+                original_name = splash_images.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                splash_images.name = unique_name
+        except:
+            pass
+        try:
+            thumb_image = request.FILES['thumb_image']
+            if thumb_image:
+                original_name = thumb_image.name
+                unique_name = f"{uuid.uuid4().hex}_{original_name}"
+                thumb_image.name = unique_name
+        except:
+            pass
+        event_kwargs={
+            'organizer_id': organizer_id,
+            'name': name,
+            'location': location,
+            'date_time': date_time,
+            'description': description,
+            'capacity': capacity,
+            'gender': gender,
+            'splash_images': splash_images,
+            'thumb_image': thumb_image
+        }
+        event = Event.objects.create(**event_kwargs)
+        event.save()
+        return HttpResponseRedirect(
+                reverse('qualafesta:organizer_events'))
+    else:
+        form = EventForm()
+        context = {'form': form}
+        return render(request, 'organizer/create_event.html', context)    
     
 class OrgTicketsView(LoginRequiredMixin, generic.DetailView):
     model = Event
