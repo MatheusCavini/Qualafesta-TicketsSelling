@@ -3,16 +3,15 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         # Set placeholders for the username and password fields
         self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
         self.fields['password'].widget.attrs['placeholder'] = 'Senha'
-
-
 
 class CustomerRegistrationForm(UserCreationForm):
     profile_image = forms.ImageField(required=False)
@@ -20,7 +19,6 @@ class CustomerRegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=255, required=True)
     last_name = forms.CharField(max_length=255, required=True)
     username = forms.CharField(max_length=255, required=True)
-    
 
     class Meta:
         model = User

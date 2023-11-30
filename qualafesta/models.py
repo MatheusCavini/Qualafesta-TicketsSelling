@@ -79,7 +79,7 @@ class PurchasedTicket(models.Model):
     ticket_order_id = models.ForeignKey(TicketsOrder, on_delete=models.CASCADE)
     ticket_category_id = models.ForeignKey(TicketCattegory, on_delete=models.CASCADE)
     hash_code = models.CharField(max_length=255)
-    entrance = models.DateField(blank=True, null=True)
+    entrance = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=False)
 
     def __str__(self):

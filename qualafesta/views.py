@@ -1,20 +1,32 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_default
-import uuid
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from qualafesta.decorators import group_required
 from django.views import generic, View
-from .models import Event
-from django.shortcuts import get_object_or_404
+from django.test import RequestFactory
+from .models import Event, TicketsOrder, TicketCattegory
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from pyzbar.pyzbar import decode
+import numpy as np
+import uuid
+import cv2
+import base64
+import json
 import qrcode
-from django.http import HttpResponse
-from django.shortcuts import render
+from datetime import datetime
+from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+import json
+import random
+import string
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -22,6 +34,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qualafesta:login"))
+    user = request.user
+    try:
+        customer = Customer.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:customer'))
+    except: pass
+    try:
+        organizer = Organizer.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:organizer'))
+    except: pass
+    try:
+        acess_controller = AcessController.objects.get(user_id=user)
+        return HttpResponseRedirect(
+            reverse('qualafesta:acess_controller'))
+    except: pass
+    if request.user.is_superuser:
+        return redirect('/admin/')
     return render(request, 'index.html', {})
 
 def login(request):
@@ -197,6 +227,17 @@ def TicketsListViews(request):
     user_instance = get_object_or_404(Customer, user_id=request.user.id)
     return render(request, 'customer/customer_ticketsList.html', {'ticketsorder': ticketsorder, 'user_instance':user_instance})
 
+def CustomerProfile(request):
+    try:
+        user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    except: 
+        try:
+            user_instance = get_object_or_404(Organizer, user_id=request.user.id)
+        except: 
+            user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    
+    return render(request, 'customer/customer_profile.html', {'user_instance':user_instance})
+
 def generate_qr_code(request, text):
     # Create a QR code instance
     qr = qrcode.QRCode(
@@ -215,6 +256,69 @@ def generate_qr_code(request, text):
     response = HttpResponse(content_type="image/png")
     img.save(response, "PNG")
     return response
+
+class EventTicketsView(generic.DetailView):
+    model = Event
+    template_name = 'customer/customer_eventTickets.html'
+
+@csrf_exempt
+@login_required
+def create_order(request):
+    if request.method == 'POST':
+        try:
+            # Assuming Customer model has a 'user' field representing the linked User instance
+            data = json.loads(request.body)
+            price = float(data.get('total_price'))
+            order = TicketsOrder.objects.create(
+                customer_id=request.user,
+                order_date=timezone.now(),
+                payment_situation=1,
+                total_price=price,
+            )
+            return JsonResponse({'success': True, 'order_id': order.id})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+@csrf_exempt  # Only for demonstration, consider using a better approach for CSRF protection
+def create_purchased_tickets(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        # Assuming you have the order_id available (modify as needed)
+        order_id = data.get('order_id')
+        order = get_object_or_404(TicketsOrder, id=order_id)
+
+        # Iterate through the selected tickets and create PurchasedTicket instances
+        for ticket_data in data.get('selected_tickets', []):
+            ticket_category_id = ticket_data.get('ticket_category_id')
+            quantity = ticket_data.get('quantity')
+
+            # Assuming you have a model for TicketCattegory
+            ticket_category = get_object_or_404(TicketCattegory, id=ticket_category_id)
+
+            # Create PurchasedTicket instances
+            for _ in range(quantity):
+                section1 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+                section2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+                section3 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+
+                # Combine the sections with hyphens
+                code = f"{section1}-{section2}-{section3}"
+                PurchasedTicket.objects.create(
+                    ticket_order_id=order,
+                    ticket_category_id=ticket_category,
+                    hash_code = code,
+                )
+                ticket_category.sold_amount += 1
+                ticket_category.save()
+                print(ticket_category.sold_amount)
+
+        return JsonResponse({'success': True, 'message': 'Purchased tickets created successfully'})
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 
 ######################################################################## Organizer Views
@@ -342,5 +446,142 @@ def is_acess_controller(user):
 
 @login_required
 @user_passes_test(is_acess_controller)
-def acess_controller_index(request):
-    return render(request, 'acess_controller/acess_controller_index.html', {})
+@csrf_exempt
+def search_event_controller(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context = {'user_instance':user_instance}
+    try:
+        search = request.GET['search_event_controller']
+        events = Event.objects.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        if len(events)>0:
+            context['event_list'] = events
+            context['search_message'] = f'Resultados para a busca de "{search}"'
+            return render(request, 'acess_controller/acess_controller_index.html', context)
+        else:
+            context['error_message'] = f'Nenhum evento encontrado para a busca "{search}"'
+            print(context)
+            return render(request, 'acess_controller/search_event_controller.html', context)
+    except:
+        return render(request, 'acess_controller/search_event_controller.html', context)
+      
+class EventControllerViews(generic.ListView):
+    model = Event
+    template_name = 'acess_controller/acess_controller_index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+
+class EventControllView(generic.DetailView):
+    model = Event
+    template_name = 'acess_controller/controll_event.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(AcessController, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context
+
+
+def get_ticket_data(ticket_hash, event_id):
+    try:
+        purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+        ticket_order = purchased_ticket.ticket_order_id
+        user = ticket_order.customer_id 
+        customer = Customer.objects.get(user_id=user.id)
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'profile_image': customer.profile_image,
+            'user':user,
+            'correct':True,
+        }
+        if purchased_ticket.status:
+            context['correct'] = False
+            context['error_message'] ='Este ingresso já foi validado'
+        elif ticket_order.payment_situation != 1:
+            context['correct'] = False
+            context['error_message'] ='O pagamento deste ingresso não foi efetuado'
+    except:
+        context ={
+            'ticket_hash': ticket_hash,
+            'event_id': event_id,
+            'correct':False,
+            'error_message':'Ingresso não encontrado'
+        }
+    return context
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def ticket_detail(request, pk):
+    ticket_hash = request.GET['query']
+    context = get_ticket_data(ticket_hash, pk)
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    context['user_instance'] = user_instance
+    return render(request, 'acess_controller/ticket_data.html', context)
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def validate_ticket(request, event_id, ticket_hash):
+    purchased_ticket = PurchasedTicket.objects.get(hash_code=ticket_hash)
+    controller_user = request.user
+    purchased_ticket.acess_controller_id = controller_user
+    purchased_ticket.status = True
+    purchased_ticket.entrance = datetime.now()
+    purchased_ticket.save()
+    return redirect(f'/acess_controller/controll_event{str(event_id)}')
+
+@login_required
+@user_passes_test(is_acess_controller)
+@csrf_exempt
+def scan_qr(request):
+    if request.method == 'POST':
+        received_data = json.loads(request.body)
+        event_id = received_data.get('event_id')
+        image_data = received_data.get('image')
+        image_data = base64.b64decode(image_data.split(',')[1])
+        nparr = np.frombuffer(image_data, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        decoded_objects = decode(gray_img)
+        if decoded_objects:
+            qr_data = decoded_objects[0].data.decode('utf-8')
+            redirect_url = f'ticket_detail?query={qr_data}'
+            return JsonResponse({'message': 'QR code decodificado com sucesso', 
+                                 'redirect_url': redirect_url,
+                                 'hash_code': qr_data})
+        else:
+            return JsonResponse({'message': 'Nenhum QR code encontrado', 
+                                 'redirect_url':None,'hash_code':None})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+    
+def acess_controller_profile(request):
+    user_instance = get_object_or_404(AcessController, user_id=request.user.id)
+    return render(request, 'acess_controller/acess_controller_profile.html', {'user_instance':user_instance})
+
+def list_events(request):
+    event_list = Event.objects.all()
+    context = {'event_list': event_list}
+    return render(request, 'eventes/index.html', context)
+#####################################
+def search_events(request):
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    context = {'user_instance':user_instance}
+    if request.GET.get('query', False):
+        search_term = request.GET['query'].lower()
+        user_instance = get_object_or_404(Customer, user_id=request.user.id)
+        event_list = Event.objects.filter(name__icontains=search_term)
+        if len(event_list) == 0:
+            event_list = "nenhum resultado"
+        context = {'user_instance':user_instance, "event_list": event_list}
+    return render(request, 'customer/search.html',context)
+
+def CustomerIndex(request):
+    event_list = Event.objects.all()
+    user_instance = get_object_or_404(Customer, user_id=request.user.id)
+    return render(request, 'customer/customer_index.html', {'user_instance':user_instance, "event_list": event_list})

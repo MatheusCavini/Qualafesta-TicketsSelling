@@ -19,7 +19,7 @@
         <div id="tabs">
             <a href="{% url 'qualafesta:aboutEvent' event.id%}"><h3 class="tabName" >SOBRE</h3></a>
             <a href="{% url 'qualafesta:attractionsEvent' event.id%}"><h3 class="tabName " style="color: #4B02B3;">ATRAÇÕES</h3></a>
-            <a><h3 class="tabName">INGRESSOS</h3></a>
+            <a href="{% url 'qualafesta:ticketsEvent' event.id%}"><h3 class="tabName">INGRESSOS</h3></a>
         </div>
         {% if event.artistparticipation_set.all %}
         <div style=" width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: start; overflow-y: scroll;">
