@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'qualafesta.apps.QualafestaConfig', 
+    'api.apps.ApiConfig', # adicione esta linha
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
