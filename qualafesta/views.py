@@ -624,7 +624,7 @@ def search_events(request):
     if request.GET.get('query', False):
         search_term = request.GET['query'].lower()
         user_instance = get_object_or_404(Customer, user_id=request.user.id)
-        event_list = Event.objects.filter(name__icontains=search_term)
+        event_list = Event.objects.filter(Q(name__icontains=search_term) | Q(description__icontains=search_term))
         if len(event_list) == 0:
             event_list = "nenhum resultado"
         context = {'user_instance':user_instance, "event_list": event_list}
