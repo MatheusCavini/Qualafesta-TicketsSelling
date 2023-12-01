@@ -2,6 +2,7 @@ asgiref==3.7.2
 colorama==0.4.6
 dj-database-url==2.1.0
 Django==3.2.23
+djangorestframework==3.14.0
 gunicorn==21.2.0
 importlib-metadata==6.7.0
 numpy==1.21.6
