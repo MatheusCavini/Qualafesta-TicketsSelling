@@ -33,7 +33,20 @@ organizer
     <h2>Adicionar novo Ingresso</h2>
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="add-button">Criar</button>
+    <button style="    display: flex;
+    font-weight: 500; font-size: 1.5rem;
+    width: 130px;
+    height: 36px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: blueviolet;
+    text-decoration: none;
+    border: 0;
+    color: white;"type="submit" class="add-button">CRIAR</button>
 </form>
 
 {% else %}

@@ -21,9 +21,10 @@
             <a class="hideWhenMobile" href="{% url 'qualafesta:organizer_events' %}"><img class="logo"
                     src="{% static '/images/logoSmall.png' %}" alt="Logo"></a>
             <a href="{% url 'qualafesta:organizer_events' %}"><img class="navIcon"
-                    src="{% if request.path == '/organizer/' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}"
+                    src="{% if request.path == '/organizer/events' %}{% static '/images/homeIconActive.svg' %}{%else%}{% static '/images/homeIcon.svg' %}{% endif %}"
                     alt="Logo"></a>
-            <a href="{% url 'qualafesta:organizerProfile' %}"> <img class="navIcon" src="{% static '/images/profileIcon.svg' %}" alt="Logo"></a>      
+            <a href="{% url 'qualafesta:organizerProfile' %}"> <img class="navIcon" 
+                src="{% if request.path == '/organizer/profile/' %}{% static '/images/profileIconActive.svg' %}{%else%}{% static '/images/profileIcon.svg' %}{% endif %}" alt="Logo"></a>      
         </div>
     </div>
     <div class="content">

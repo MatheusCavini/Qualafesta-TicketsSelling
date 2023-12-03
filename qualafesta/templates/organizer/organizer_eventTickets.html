@@ -81,9 +81,10 @@
                 PARA COMPRA NESSE EVENTO.</p>
         </div>
         {%endif%}
-        <a style="margin-top: 2.5vh; margin-bottom: 5vh;" href="{% url 'qualafesta:create_ticket' event.id %}">
+        <a style="margin-top: 2.5vh; margin-bottom: 5vh;text-decoration: none;" href="{% url 'qualafesta:create_ticket' event.id %}">
             <button style="    display: flex;
-            width: 120px;
+            font-weight: 500; font-size: 1.5rem;
+            width: 130px;
             height: 36px;
             padding: 8px;
             justify-content: center;
@@ -91,9 +92,11 @@
             gap: 8px;
             flex-shrink: 0;
             border-radius: 8px;
-            background: var(--E, #4B02B3);
+            background: blueviolet;
+            text-decoration: none;
+            border: 0;
             color: white;">+
-                Adicionar</button></a>
+                ADICIONAR</button></a>
     </div>
 </div>
 </div>

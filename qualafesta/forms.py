@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
-from datetime import datetime
+from datetime import datetime 
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -101,6 +101,15 @@ class EventForm(ModelForm):
     thumb_image = forms.ImageField(required=True)
     gender = forms.CharField(max_length=255, required=True)
 
+    name.label = "Nome do evento"
+    location.label = "Local"
+    date_time.label = "Data e hora"
+    description.label = "Descrição"
+    capacity.label = "Capacidade"
+    splash_images.label = "Imagem de capa"
+    thumb_image.label = "Imagem de ícone"
+    gender.label = "Gênero"
+
     class Meta:
         model = ArtistParticipation
         fields = [
@@ -157,6 +166,10 @@ class TicketForm(ModelForm):
     description = forms.CharField(max_length=255, required=True)
     capacity = forms.IntegerField(required=True)
     price = forms.IntegerField(required=True)
+    name.label = "Nome"
+    description.label = "Descrição"
+    capacity.label = "Capacidade"
+    price.label = "Preço"
 
     class Meta:
         model = ArtistParticipation
