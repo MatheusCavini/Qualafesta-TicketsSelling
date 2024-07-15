@@ -111,7 +111,7 @@ class EventForm(ModelForm):
     gender.label = "Gênero"
 
     class Meta:
-        model = ArtistParticipation
+        model = Event
         fields = [
             'name',
             'location',
@@ -172,7 +172,7 @@ class TicketForm(ModelForm):
     price.label = "Preço"
 
     class Meta:
-        model = ArtistParticipation
+        model = TicketCattegory
         fields = fields = [
             'name',
             'description',

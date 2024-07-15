@@ -14,8 +14,7 @@ organizer
 {% block content %}
 <div class="header">
     <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
-        <img class="profileImage"
-            src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}" />
+        <img class="profileImage" src="{% if user_instance.profile_image %}{{user_instance.profile_image.url}}{% else %} /media/images/profile_default.png{%endif%}"/>
         <div class="headerInfo">
             <h2 class="userName">Olá, {{request.user.first_name}} {{request.user.last_name}}!</h2>
             <p class="welcome">Bem-vindo ao App Qualafesta!</p>

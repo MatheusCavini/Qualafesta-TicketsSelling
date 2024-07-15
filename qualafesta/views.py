@@ -364,89 +364,59 @@ class UpdateEventView(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return (reverse('qualafesta:organizer_events'))  
+        return (reverse('qualafesta:organizer_events'))
 
-def create_attraction(request, pk):
-    event = Event.objects.get(id=pk)
-    if request.method == 'POST':
-        form = AttractionForm(request.POST)
-        artist_name = request.POST['artist_name']
-        begin_time = request.POST['begin_time']
-        end_time = request.POST['end_time']
-        artist_image = None
-        try:
-            artist_image = request.FILES['artist_image']
-            if artist_image:
-                original_name = artist_image.name
-                unique_name = f"{uuid.uuid4().hex}_{original_name}"
-                artist_image.name = unique_name
-        except:
-            pass
-        artist_kwargs = {
-                'event_id': event,
-                'artist_name':artist_name,
-                'begin_time':begin_time,
-                'end_time':end_time,
-                'artist_image':artist_image
-            }
-        artist = ArtistParticipation.objects.create(**artist_kwargs)
-        artist.save()
-        return HttpResponseRedirect(
-                reverse('qualafesta:event_attractions', args=(event.id, )))
-    else:
-        form = AttractionForm()
-        context = {'form': form, 'event': event}
-        return render(request, 'organizer/create_attraction.html', context)    
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context  
+ 
 
-def create_event(request):
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        name= request.POST['name']
-        location= request.POST['location']
-        date_time= request.POST['date_time']
-        description= request.POST['description']
-        capacity= request.POST['capacity']
-        gender= request.POST['gender']
-        splash_images= None
-        thumb_image= None
-        organizer_id = request.user
-        try:
-            splash_images = request.FILES['splash_images']
-            if splash_images:
-                original_name = splash_images.name
-                unique_name = f"{uuid.uuid4().hex}_{original_name}"
-                splash_images.name = unique_name
-        except:
-            pass
-        try:
-            thumb_image = request.FILES['thumb_image']
-            if thumb_image:
-                original_name = thumb_image.name
-                unique_name = f"{uuid.uuid4().hex}_{original_name}"
-                thumb_image.name = unique_name
-        except:
-            pass
-        event_kwargs={
-            'organizer_id': organizer_id,
-            'name': name,
-            'location': location,
-            'date_time': date_time,
-            'description': description,
-            'capacity': capacity,
-            'gender': gender,
-            'splash_images': splash_images,
-            'thumb_image': thumb_image
-        }
-        event = Event.objects.create(**event_kwargs)
-        event.save()
-        return HttpResponseRedirect(
-                reverse('qualafesta:organizer_events'))
-    else:
-        form = EventForm()
-        context = {'form': form}
-        return render(request, 'organizer/create_event.html', context)    
+class CreateAttractionView(LoginRequiredMixin, generic.CreateView):
+    model = ArtistParticipation
+    form_class = AttractionForm
+    template_name = 'organizer/create_attraction.html'
+
+    def form_valid(self, form):
+        # Assume que 'pk' está vindo da URL
+        event = get_object_or_404(Event, id=self.kwargs['pk'])
+        form.instance.event_id = event
+        form.instance.organizer_id = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Redireciona para a página dos tickets do evento
+        return reverse('qualafesta:event_attractions', args=(self.kwargs['pk'],))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        event = get_object_or_404(Event, id=self.kwargs['pk'])
+        context['user_instance'] = user_instance
+        context['event'] = event
+        return context  
+        
     
+class CreateEventView(LoginRequiredMixin, generic.CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'organizer/create_event.html'
+
+    def form_valid(self, form):
+        form.instance.organizer_id = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return (reverse('qualafesta:organizer_events'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        context['user_instance'] = user_instance
+        return context  
+
+
 class OrgTicketsView(LoginRequiredMixin, generic.DetailView):
     model = Event
     template_name = 'organizer/organizer_eventTickets.html'
@@ -480,7 +450,32 @@ def create_ticket(request, pk):
     else:
         form = TicketForm()
         context = {'form': form, 'event': event}
-        return render(request, 'organizer/create_ticket.html', context)   
+        return render(request, 'organizer/create_ticket.html', context)  
+
+class CreateTicketsView(LoginRequiredMixin, generic.CreateView):
+    model = TicketCattegory
+    form_class = TicketForm
+    template_name = 'organizer/create_ticket.html'
+
+    def form_valid(self, form):
+        # Assume que 'pk' está vindo da URL
+        event = get_object_or_404(Event, id=self.kwargs['pk'])
+        form.instance.event_id = event
+        form.instance.organizer_id = self.request.user
+        form.instance.sold_amount = 0
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Redireciona para a página dos tickets do evento
+        return reverse('qualafesta:event_tickets', args=(self.kwargs['pk'],))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_instance = get_object_or_404(Organizer, user_id=self.request.user.id)
+        event = get_object_or_404(Event, id=self.kwargs['pk'])
+        context['user_instance'] = user_instance
+        context['event'] = event
+        return context
     
 def organizer_profile(request):
     user_instance = get_object_or_404(Organizer, user_id=request.user.id)
