@@ -11,13 +11,13 @@ The project was created as part of the discipline "Information Systems" (PMR3304
 
 ## Demonstration 
 ### Organizer 
-[organizerVideo.webm](https://github.com/user-attachments/assets/5cac558f-acee-4ecc-aa7e-d828e40b4d7c)
+[organizer video](https://github.com/user-attachments/assets/f91bce39-2fca-48b4-874e-8405a4aa8b49)
 
 ### Customer 
-[customerVideo.webm](https://github.com/user-attachments/assets/51a47e14-ec8f-4e09-80c8-29fb3019eddf)
+[customerVideo.webm](https://github.com/user-attachments/assets/db8a9d4e-0f05-4ea0-8ca7-8bae6aabd21f)
 
 ### Access Controller 
-[controllerVideo.webm](https://github.com/user-attachments/assets/0794cf9f-b401-472c-ac61-138ba1f2d093)
+[controllerVideo.webm](https://github.com/user-attachments/assets/880ce4e2-fb14-42b6-af7e-c4f35a72b3e5)
 
 ## Features
 - Authorization logic, redirecting each categorie of user to its own specific pages through a single login page.
